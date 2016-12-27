@@ -21,15 +21,20 @@ import fetchComponentData from '../common/utils/fetchComponentData';
 import { createRepository } from '../common/utils/repository';
 import authStrategy from './strategies/auth';
 import numberStrategy from './strategies/numbers';
+import packageStrategy from './strategies/packages';
 
 import cookieParser from 'cookie-parser';
 
-import { authMiddleware } from './auth';
-console.log(authMiddleware);
+import * as packageActions from '../common/actions/package-actions';
+
+// I don't think we need auth for this project
+// import { authMiddleware } from './auth';
+// console.log(authMiddleware);
 
 createRepository({
 	auth: authStrategy,
-	numbers: numberStrategy
+	numbers: numberStrategy,
+	packages: packageStrategy
 });
 
 const app = express();
@@ -37,10 +42,10 @@ const app = express();
 app.use(cookieParser());
 app.use(bodyParser.json());
 
-app.use(authMiddleware({
-	allowAnon: ['/api/login', '/', '/assets.*', '/dist.*'],
-	requireCsrfToken: ['/api/.*']
-}));
+// app.use(authMiddleware({
+// 	allowAnon: ['/api/login', '/', '/assets.*', '/dist.*'],
+// 	requireCsrfToken: ['/api/.*']
+// }));
 
 app.use('/assets', express.static(path.join(__dirname, '../client/assets')));
 app.use('/dist', express.static(path.join(__dirname, '../dist')));
@@ -70,6 +75,9 @@ app.use((req, res, next) => {
 	// react-router
 	match({ routes, location: req.url }, (error, redirectLocation, renderProps) => {
 
+		//console.log(fetchVersionTree);
+		//packageActions.fetchVersionTree(renderProps.params.versionId)(store.dispatch).then(console.log('tree loaded'));
+
 		if (error) {
 			return res.status(500).send(error.message);
 		}
@@ -92,8 +100,17 @@ app.use((req, res, next) => {
 		// hence ensuring all data needed was fetched before proceeding
 		//
 		// renderProps: contains all necessary data, e.g: routes, router, history, components...
-		fetchComponentData(store.dispatch, renderProps.components, renderProps.params)
+		//fetchComponentData(store.dispatch, renderProps.components, renderProps.params)
 
+		const versionId = renderProps.params.versionId;
+		const packageId = versionId.indexOf('@') > 0 ? versionId.substring(0, versionId.indexOf('@')) : undefined;
+		const version = versionId.indexOf('@') > 0 ? versionId.substring(versionId.indexOf('@') + 1) : undefined;
+
+		Promise.all([
+			packageActions.fetchVersionTree(packageId, version)(store.dispatch),
+			packageActions.fetchVersionHistory(packageId, version)(store.dispatch)
+		])
+			//loadVersionTree
 			.then(() => {
 
 				const initView = renderToString((
@@ -105,7 +122,7 @@ app.use((req, res, next) => {
 				// console.log('\ninitView:\n', initView);
 
 				let state = JSON.stringify(store.getState());
-				// console.log( '\nstate: ', state )
+				console.log('\nstate: ', state);
 
 				let page = renderFullPage(initView, state);
 				// console.log( '\npage:\n', page );
@@ -127,6 +144,30 @@ function renderFullPage(html, initialState) {
 	  <head>
 		<title>Universal Redux Example</title>
 		<link rel="shortcut icon" type="image/png" href="assets/images/react.png">
+		<style>
+			li {
+				list-style: none;
+			}
+			div.lhs span {
+				background-color: #ffecec;
+			}
+			div.lhs span.changed {
+				background-color: #f8cbcb;
+			}
+			div.rhs span {
+				background-color: #dbffdb;
+			}
+			div.rhs span.changed {
+				background-color: #a6f3a6;
+			}
+			div.lhs>span, div.rhs>span {
+				display: inline-block;
+				padding: 2px .5em;
+			}
+			li.changeset {
+				padding-bottom: 1em;
+			}
+		</style>
 	  </head>
 	  <body>
 	  <div id="app">${html}</div>

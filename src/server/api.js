@@ -2,8 +2,12 @@ import express from 'express';
 
 import { addAuth, clearAuth } from './auth';
 import { getRepository } from '../common/utils/repository';
+import operations from '../common/constants/operations';
+import packageApi from './package-api';
 
 const app = express();
+
+app.use('/packages', packageApi);
 
 app.post('/login', (req, res) => {
 	const { username } = req.body;
@@ -68,5 +72,7 @@ app.put('/number', (req, res) => {
 			res.status(500).send({ reason });
 		});
 });
+
+
 
 export default app;
