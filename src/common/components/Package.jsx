@@ -3,6 +3,8 @@ import moment from 'moment';
 import { connect } from 'react-redux';
 import { fetchVersionTree, fetchVersionHistory, setTreeIsActive, setHistoryIsActive } from '../actions/package-actions';
 
+import RaisedButton from 'material-ui/RaisedButton';
+
 class Package extends Component {
 
 	static contextTypes = {
@@ -87,8 +89,8 @@ class Package extends Component {
 		return (
 			<div>
 				{this.props.versionId}
-				<button onClick={() => this.props.setTreeIsActive()}>Tree</button>
-				<button onClick={() => this.props.setHistoryIsActive()}>History</button>
+				<RaisedButton label="Tree" onClick={() => this.props.setTreeIsActive()} />
+				<RaisedButton label="History" onClick={() => this.props.setHistoryIsActive()} />
 				{body}
 			</div>
 		);

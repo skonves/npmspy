@@ -11,6 +11,8 @@ import { createRepository } from '../common/utils/repository';
 import authStrategy from './strategies/auth';
 import numberStrategy from './strategies/numbers';
 
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+
 createRepository({
 	auth: authStrategy,
 	numbers: numberStrategy
@@ -27,7 +29,9 @@ const store = createStore(combinedReducers, state, applyMiddleware(thunk));
 
 render(
 	<Provider store={store}>
-		<Router history={browserHistory} routes={routes} />
+		<MuiThemeProvider>
+			<Router history={browserHistory} routes={routes} />
+		</MuiThemeProvider>
 	</Provider>,
-	document.querySelector( '#app' )
+	document.querySelector('#app')
 );

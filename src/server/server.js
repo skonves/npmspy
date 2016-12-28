@@ -27,6 +27,10 @@ import cookieParser from 'cookie-parser';
 
 import * as packageActions from '../common/actions/package-actions';
 
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import { green100, green500, green700 } from 'material-ui/styles/colors';
+
 // I don't think we need auth for this project
 // import { authMiddleware } from './auth';
 // console.log(authMiddleware);
@@ -113,16 +117,31 @@ app.use((req, res, next) => {
 			//loadVersionTree
 			.then(() => {
 
+				const muiTheme = getMuiTheme({
+					palette: {
+						// primary1Color: green500,
+						// primary2Color: green700,
+						// primary3Color: green100,
+					},
+				}, {
+					avatar: {
+						borderColor: null,
+					},
+					userAgent: req.headers['user-agent'],
+				});
+
 				const initView = renderToString((
 					<Provider store={store}>
-						<RouterContext {...renderProps} />
+						<MuiThemeProvider muiTheme={muiTheme}>
+							<RouterContext {...renderProps} />
+						</MuiThemeProvider>
 					</Provider>
 				));
 
 				// console.log('\ninitView:\n', initView);
 
 				let state = JSON.stringify(store.getState());
-				console.log('\nstate: ', state);
+				//console.log('\nstate: ', state);
 
 				let page = renderFullPage(initView, state);
 				// console.log( '\npage:\n', page );
@@ -144,7 +163,12 @@ function renderFullPage(html, initialState) {
 	  <head>
 		<title>Universal Redux Example</title>
 		<link rel="shortcut icon" type="image/png" href="assets/images/react.png">
+		<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
 		<style>
+			body {
+				margin: 0;
+				font-family: 'Roboto', sans-serif;
+			}
 			li {
 				list-style: none;
 			}

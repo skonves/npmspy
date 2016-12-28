@@ -65,7 +65,7 @@ function getHistory(values) {
 	const version = (values || {}).version;
 	const before = (values || {}).before;
 
-	const limit = 100;
+	const limit = 25;
 
 	const uri = `${endpoint}/packages/${packageId}/versions/${version}/history?before=${before}&limit=${limit}`;
 
