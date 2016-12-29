@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { setActiveView } from '../actions/package-actions';
 
 import RaisedButton from 'material-ui/RaisedButton';
+import DatePicker from 'material-ui/DatePicker';
+import Toggle from 'material-ui/Toggle';
 
 class PackageDependencies extends Component {
 
@@ -32,11 +34,15 @@ class PackageDependencies extends Component {
 		}
 
 		return (
-			<ul className="top hierarchy">
-				{Object.keys(this.props.dependencies || {}).sort().map((k, i) => {
-					return renderTree(k, this.props.dependencies[k], i);
-				})}
-			</ul>
+			<div>
+				<DatePicker hintText="Portrait Dialog" firstDayOfWeek={0} maxDate={new Date()}/>
+				<Toggle label="View Latest" labelPosition="right" />
+				<ul className="top hierarchy">
+					{Object.keys(this.props.dependencies || {}).sort().map((k, i) => {
+						return renderTree(k, this.props.dependencies[k], i);
+					})}
+				</ul>
+			</div>
 		);
 	}
 }
