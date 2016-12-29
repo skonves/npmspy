@@ -1,22 +1,39 @@
 import actionTypes from '../actions/action-types';
 
-function setTreeIsActive(oldState, action) {
+const exampleState = {
+	packageId: 'example',
+	version: '0.0.1',
+	activeView: 'details|dependencies|history',
+	detailsAreLoading: false,
+	dependenciesAreLoading: false,
+	historyIsLoading: false,
+	details: null,
+	dependencies: '{tree object}',
+	history: '[array]'
+};
+
+function setPackage(oldState, action) {
 	const newState = { ...oldState };
-	newState.treeIsActive = action.payload.isActive;
-	newState.historyIsActive = !action.payload.isActive;
+	newState.packageId = action.payload.packageId || newState.packageId;
+	newState.version = action.payload.version || newState.packageId;
 	return newState;
 }
 
-function setHistoryIsActive(oldState, action) {
+function setActiveView(oldState, action) {
 	const newState = { ...oldState };
-	newState.historyIsActive = action.payload.isActive;
-	newState.treeIsActive = !action.payload.isActive;
+	newState.activeView = action.payload.activeView;
 	return newState;
 }
 
-function setTreeIsLoading(oldState, action) {
+function setDetailsAreLoading(oldState, action) {
 	const newState = { ...oldState };
-	newState.treeIsLoading = action.payload.isLoading;
+	newState.detailsAreLoading = action.payload.isLoading;
+	return newState;
+}
+
+function setDependenciesAreLoading(oldState, action) {
+	const newState = { ...oldState };
+	newState.dependenciesAreLoading = action.payload.isLoading;
 	return newState;
 }
 
@@ -26,9 +43,15 @@ function setHistoryIsLoading(oldState, action) {
 	return newState;
 }
 
-function setTree(oldState, action) {
+function setDetails(oldState, action) {
 	const newState = { ...oldState };
-	newState.tree = action.payload.tree;
+	newState.details = action.payload.details;
+	return newState;
+}
+
+function setDependencies(oldState, action) {
+	const newState = { ...oldState };
+	newState.dependencies = action.payload.dependencies;
 	return newState;
 }
 
@@ -42,19 +65,23 @@ function appendHistory(oldState, action) {
 	return newState;
 }
 
-export default function (state = { treeIsActive: true }, action) {
+export default function (state = { }, action) {
 	switch (action.type) {
-		case actionTypes.packages.SET_TREE_IS_ACTIVE:
-			return setTreeIsActive(state, action);
-		case actionTypes.packages.SET_HISTORY_IS_ACTIVE:
-			return setHistoryIsActive(state, action);
-		case actionTypes.packages.SET_TREE_IS_LOADING:
-			return setTreeIsLoading(state, action);
+		case actionTypes.packages.SET_PACKAGE:
+			return setPackage(state, action);
+		case actionTypes.packages.SET_ACTIVE_VIEW:
+			return setActiveView(state, action);
+		case actionTypes.packages.SET_DETAILS_ARE_LOADING:
+			return setDetailsAreLoading(state, action);
+		case actionTypes.packages.SET_DEPENDENCIES_ARE_LOADING:
+			return setDependenciesAreLoading(state, action);
 		case actionTypes.packages.SET_HISTORY_IS_LOADING:
 			return setHistoryIsLoading(state, action);
-		case actionTypes.packages.SET_VERSION_TREE:
-			return setTree(state, action);
-		case actionTypes.packages.APPEND_VERSION_HISTORY:
+		case actionTypes.packages.SET_DETAILS:
+			return setDetails(state, action);
+		case actionTypes.packages.SET_DEPENDENCIES:
+			return setDependencies(state, action);
+		case actionTypes.packages.APPEND_HISTORY:
 			return appendHistory(state, action);
 		default:
 			return state;

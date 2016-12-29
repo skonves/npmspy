@@ -1,0 +1,74 @@
+body {
+	margin: 0;
+	font-family: 'Roboto', sans-serif;
+}
+
+header {
+	background-color: #00bcd4;
+}
+
+.middled {
+	max-width: 780px;
+	margin: 0 auto;
+	padding: 0 20px;
+}
+
+footer {
+	text-align: center;
+	color: white;
+	font-size: 75%;
+	padding: 35px 0;
+	margin-top: 35px;
+	background-color: #00bcd4;
+}
+
+header .middled{
+	padding-left: 0;
+	padding-right: 0;
+}
+
+div.lhs span {
+	background-color: #ffecec;
+}
+div.lhs span.changed {
+	background-color: #f8cbcb;
+}
+div.rhs span {
+	background-color: #dbffdb;
+}
+div.rhs span.changed {
+	background-color: #a6f3a6;
+}
+div.lhs>span, div.rhs>span {
+	display: inline-block;
+	padding: 2px .5em;
+}
+li.changeset {
+	padding-bottom: 1em;
+}
+
+ul.hierarchy {
+	margin-left: 10px;
+	padding-left: 20px;
+	border-left: 1px solid #00bcd4;
+}
+
+ul.top.hierarchy {
+	margin-left: 0;
+	padding-left: 0;
+	border-left: none;
+}
+
+ul.hierarchy li {
+	margin: 5px 0;
+}
+
+li, ul {
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+
+.card {
+	margin: 20px 0;
+}

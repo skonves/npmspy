@@ -2,10 +2,32 @@
 import { getRepository } from '../utils/repository';
 import actionTypes from './action-types';
 import operations from '../constants/operations';
+import { browserHistory } from 'react-router';
 
-export function setTreeIsLoading(isLoading) {
+export function setPackage(packageId, version) {
 	return {
-		type: actionTypes.packages.SET_TREE_IS_LOADING,
+		type: actionTypes.packages.SET_PACKAGE,
+		payload: { packageId, version }
+	};
+}
+
+export function setActiveView(activeView) {
+	return {
+		type: actionTypes.packages.SET_ACTIVE_VIEW,
+		payload: { activeView: activeView === 'dependencies' || activeView === 'history' ? activeView : 'details' }
+	};
+}
+
+export function setDetailsAreLoading(isLoading) {
+	return {
+		type: actionTypes.packages.SET_DETAILS_ARE_LOADING,
+		payload: { isLoading }
+	};
+}
+
+export function setDependenciesAreLoading(isLoading) {
+	return {
+		type: actionTypes.packages.SET_DEPENDENCIES_ARE_LOADING,
 		payload: { isLoading }
 	};
 }
@@ -17,62 +39,69 @@ export function setHistoryIsLoading(isLoading) {
 	};
 }
 
-export function setTreeIsActive(isActive) {
+export function setDetails(details) {
 	return {
-		type: actionTypes.packages.SET_TREE_IS_ACTIVE,
-		payload: { isActive }
+		type: actionTypes.packages.SET_DETAILS,
+		payload: { details }
 	};
 }
 
-export function setHistoryIsActive(isActive) {
+export function setDependencies(dependencies) {
 	return {
-		type: actionTypes.packages.SET_HISTORY_IS_ACTIVE,
-		payload: { isActive }
+		type: actionTypes.packages.SET_DEPENDENCIES,
+		payload: { dependencies }
 	};
 }
 
-export function setVersionTree(tree) {
+export function appendHistory(historyItems) {
 	return {
-		type: actionTypes.packages.SET_VERSION_TREE,
-		payload: { tree }
-	};
-}
-
-export function appendVersionHistory(historyItems) {
-	return {
-		type: actionTypes.packages.APPEND_VERSION_HISTORY,
+		type: actionTypes.packages.APPEND_HISTORY,
 		payload: { historyItems }
 	};
 }
 
-export function fetchVersionTree(packageId, version, ts) {
-	return dispatch => {
-		dispatch(setTreeIsLoading(true));
+export function navigateToView(viewName) {
+	return (dispatch, getState) => {
 
-		return getRepository()
-			.packages(operations.packages.GET_DEPENDENCIES, { packageId, version, ts })
-			.then(value => {
-				dispatch(setVersionTree(value));
-				dispatch(setTreeIsLoading(false));
-			})
-			.catch(reason => {
-				dispatch(setTreeIsLoading(false));
-			});
+		const state = getState().packageReducer;
+		viewName = viewName === 'dependencies' || viewName === 'history' ? '/' + viewName : '';
+
+		dispatch(setActiveView(viewName));
+
+		return new Promise(resolve => {
+			browserHistory.push(`/packages/${state.packageId}@${state.version}${viewName}`);
+		});
 	};
 }
 
-export function fetchVersionHistory(packageId, version, before) {
+export function fetchVersion(packageId, version) {
 	return dispatch => {
+		dispatch(setPackage(packageId, version));
+		// TODO: load package details
+		dispatch(setDetails({ message: 'TODO' }));
+		dispatch(setDependenciesAreLoading(true));
 		dispatch(setHistoryIsLoading(true));
 
-		return getRepository()
-			.packages(operations.packages.GET_HISTORY, { packageId, version, before })
-			.then(value => {
-				dispatch(appendVersionHistory(value.history));
-				dispatch(setHistoryIsLoading(false));
-			})
-			.catch(reason => {
-				dispatch(setHistoryIsLoading(false));
-			});
+		return Promise.all([
+			// TODO: load package details
+			getRepository()
+				.packages(operations.packages.GET_DEPENDENCIES, { packageId, version })
+				.then(value => {
+					dispatch(setDependencies(value.dependencies));
+					dispatch(setDependenciesAreLoading(false));
+				})
+				.catch(reason => {
+					dispatch(setDependenciesAreLoading(false));
+				}),
+			getRepository()
+				.packages(operations.packages.GET_HISTORY, { packageId, version })
+				.then(value => {
+					dispatch(appendHistory(value.history));
+					dispatch(setHistoryIsLoading(false));
+				})
+				.catch(reason => {
+					dispatch(setHistoryIsLoading(false));
+				})
+		]);
 	};
 }

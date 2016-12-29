@@ -26,7 +26,7 @@ function getVersions(values) {
 	const packageId = (values || {}).packageId;
 	const offset = (values || {}).offset || 0;
 
-	const limit = 25;
+	const limit = 5;
 
 	return new Promise((resolve, reject) => {
 		request.get(`${endpoint}/packages/${packageId}/versions?offset=${offset}&limit=${limit}`, (err, res) => {

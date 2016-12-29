@@ -26,6 +26,7 @@ import packageStrategy from './strategies/packages';
 import cookieParser from 'cookie-parser';
 
 import * as packageActions from '../common/actions/package-actions';
+import * as historyActions from '../common/actions/history-actions';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -106,16 +107,27 @@ app.use((req, res, next) => {
 		// renderProps: contains all necessary data, e.g: routes, router, history, components...
 		//fetchComponentData(store.dispatch, renderProps.components, renderProps.params)
 
-		const versionId = renderProps.params.versionId;
+		const { versionId } = renderProps.params;
 		const packageId = versionId.indexOf('@') > 0 ? versionId.substring(0, versionId.indexOf('@')) : undefined;
 		const version = versionId.indexOf('@') > 0 ? versionId.substring(versionId.indexOf('@') + 1) : undefined;
 
 		Promise.all([
-			packageActions.fetchVersionTree(packageId, version)(store.dispatch),
-			packageActions.fetchVersionHistory(packageId, version)(store.dispatch)
+			packageActions.fetchVersion(packageId, version)(store.dispatch)
+			// packageActions.fetchVersionTree(packageId, version)(store.dispatch),
+			// historyActions.fetchLatestHistory(packageId, version)(store.dispatch)
 		])
 			//loadVersionTree
 			.then(() => {
+
+				const lastRoute = renderProps.routes[renderProps.routes.length - 1].path;
+
+				if (lastRoute === '/packages/:versionId/dependencies') {
+					store.dispatch(packageActions.setActiveView('dependencies'));
+				} else if (lastRoute === '/packages/:versionId/history') {
+					store.dispatch(packageActions.setActiveView('history'));
+				} else {
+					store.dispatch(packageActions.setActiveView('details'));
+				}
 
 				const muiTheme = getMuiTheme({
 					palette: {
@@ -162,36 +174,10 @@ function renderFullPage(html, initialState) {
 	<html lang="utf-8">
 	  <head>
 		<title>Universal Redux Example</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="shortcut icon" type="image/png" href="assets/images/react.png">
 		<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
-		<style>
-			body {
-				margin: 0;
-				font-family: 'Roboto', sans-serif;
-			}
-			li {
-				list-style: none;
-			}
-			div.lhs span {
-				background-color: #ffecec;
-			}
-			div.lhs span.changed {
-				background-color: #f8cbcb;
-			}
-			div.rhs span {
-				background-color: #dbffdb;
-			}
-			div.rhs span.changed {
-				background-color: #a6f3a6;
-			}
-			div.lhs>span, div.rhs>span {
-				display: inline-block;
-				padding: 2px .5em;
-			}
-			li.changeset {
-				padding-bottom: 1em;
-			}
-		</style>
+		<link href="/dist/styles/app.css" rel="stylesheet">
 	  </head>
 	  <body>
 	  <div id="app">${html}</div>

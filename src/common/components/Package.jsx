@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
 import { connect } from 'react-redux';
-import { fetchVersionTree, fetchVersionHistory, setTreeIsActive, setHistoryIsActive } from '../actions/package-actions';
+import { fetchVersionTree, fetchVersionHistory, setTreeIsActive, setHistoryIsActive, setActiveView } from '../actions/package-actions';
 
 import RaisedButton from 'material-ui/RaisedButton';
 
@@ -10,6 +10,12 @@ class Package extends Component {
 	static contextTypes = {
 		store: React.PropTypes.object.isRequired,
 	};
+
+	componentWillMount() {
+		if (this.props.setActiveView !== 'details') {
+			this.props.setActiveView('details');
+		}
+	}
 
 	render() {
 		function prettyDate(ts) {
@@ -115,6 +121,9 @@ function mapDispatchToProps(dispatch, ownProps) {
 		},
 		setHistoryIsActive: () => {
 			dispatch(setHistoryIsActive(true));
+		},
+		setActiveView: viewName => {
+			dispatch(setActiveView(viewName));
 		}
 	};
 }

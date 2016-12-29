@@ -4,12 +4,14 @@
   "description": "Reference projects for ES7/8+ code",
   "main": "index.js",
   "scripts": {
-    "build": "babel src --out-dir .compiled & npm run webpack",
+    "build": "babel src --out-dir .compiled & npm run webpack & npm run copystyles",
     "clean": "rm -rf .compiled && mkdir .compiled",
     "rebuild": "npm run clean && npm run build",
     "start": "NODE_ENV=development node ./.compiled/server/server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "webpack": "webpack --optimize-dedupe"
+    "webpack": "webpack --optimize-dedupe",
+    "webpack-min": "webpack --optimize-dedupe --optimize-minimize",
+    "copystyles": "copyfiles -f src/client/public/*.css .compiled/dist/styles"
   },
   "author": "Steve Konves",
   "license": "MIT",
@@ -40,6 +42,7 @@
     "babel-plugin-transform-react-jsx": "^6.8.0",
     "babel-preset-es2015": "^6.18.0",
     "babel-preset-stage-0": "^6.16.0",
+    "copyfiles": "^1.0.0",
     "eslint": "^3.9.1",
     "eslint-plugin-babel": "^3.3.0",
     "webpack": "^1.13.3"

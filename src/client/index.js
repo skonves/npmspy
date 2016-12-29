@@ -10,12 +10,14 @@ import thunk from 'redux-thunk';
 import { createRepository } from '../common/utils/repository';
 import authStrategy from './strategies/auth';
 import numberStrategy from './strategies/numbers';
+import packageStrategy from './strategies/packages';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 createRepository({
 	auth: authStrategy,
-	numbers: numberStrategy
+	numbers: numberStrategy,
+	packages: numberStrategy
 });
 
 let state = null;
