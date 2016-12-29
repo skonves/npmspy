@@ -108,8 +108,8 @@ app.use((req, res, next) => {
 		//fetchComponentData(store.dispatch, renderProps.components, renderProps.params)
 
 		const { versionId } = renderProps.params;
-		const packageId = versionId.indexOf('@') > 0 ? versionId.substring(0, versionId.indexOf('@')) : undefined;
-		const version = versionId.indexOf('@') > 0 ? versionId.substring(versionId.indexOf('@') + 1) : undefined;
+		const packageId = versionId && versionId.indexOf('@') > 0 ? versionId.substring(0, versionId.indexOf('@')) : undefined;
+		const version = versionId && versionId.indexOf('@') > 0 ? versionId.substring(versionId.indexOf('@') + 1) : undefined;
 
 		Promise.all([
 			packageActions.fetchVersion(packageId, version)(store.dispatch)
@@ -121,9 +121,9 @@ app.use((req, res, next) => {
 
 				const lastRoute = renderProps.routes[renderProps.routes.length - 1].path;
 
-				if (lastRoute === '/packages/:versionId/dependencies') {
+				if (lastRoute === ':versionId/dependencies') {
 					store.dispatch(packageActions.setActiveView('dependencies'));
-				} else if (lastRoute === '/packages/:versionId/history') {
+				} else if (lastRoute === ':versionId/history') {
 					store.dispatch(packageActions.setActiveView('history'));
 				} else {
 					store.dispatch(packageActions.setActiveView('details'));

@@ -5,14 +5,18 @@ import Home from '../components/Home';
 import NumberManager from '../components/NumberManager';
 import ShortLink from '../components/ShortLink';
 import Package from '../components/Package';
-import PackageHistory from '../components/PackageHistory';
+import PackageHeader from '../components/PackageHeader';
+import PackageDetails from '../components/PackageDetails';
 import PackageDependencies from '../components/PackageDependencies';
+import PackageHistory from '../components/PackageHistory';
 
 export default (
 	<Route path="/" component={App}>
 		<IndexRoute component={Home} />
-		<Route path="/packages/:versionId" components={Package} />
-		<Route path="/packages/:versionId/dependencies" components={PackageDependencies} />
-		<Route path="/packages/:versionId/history" components={PackageHistory} />
+		<Route path="packages" components={{ pageHeader: PackageHeader, page: Package }}>
+			<Route path=":versionId" component={PackageDetails} />
+			<Route path=":versionId/dependencies" component={PackageDependencies} />
+			<Route path=":versionId/history" component={PackageHistory} />
+		</Route>
 	</Route>
 );

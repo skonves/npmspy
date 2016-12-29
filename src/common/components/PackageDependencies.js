@@ -36,8 +36,6 @@ class PackageDependencies extends Component {
 				{Object.keys(this.props.dependencies || {}).sort().map((k, i) => {
 					return renderTree(k, this.props.dependencies[k], i);
 				})}
-
-				{/*renderTree(this.props.packageId, { version: this.props.version, dependencies: this.props.dependencies }, 0)*/}
 			</ul>
 		);
 	}

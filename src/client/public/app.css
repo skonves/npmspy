@@ -72,3 +72,7 @@ li, ul {
 .card {
 	margin: 20px 0;
 }
+
+.comment {
+	color: rgba(96, 139, 78, 1);
+}
