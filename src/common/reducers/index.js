@@ -4,6 +4,7 @@ import linkReducer from './linkReducer';
 import numberReducer from './numberReducer';
 import packageReducer from './package-reducer';
 import historyReducer from './history-reducer';
+import searchReducer from './search-reducer';
 
 export default combineReducers({
 	auth,
@@ -11,4 +12,5 @@ export default combineReducers({
 	numberReducer,
 	packageReducer,
 	historyReducer,
+	searchReducer
 });

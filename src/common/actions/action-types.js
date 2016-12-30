@@ -35,5 +35,9 @@ export default {
 	history: {
 		SET_IS_LOADING: 'SET_IS_LOADING',
 		APPEND_HISTORY: 'APPEND_HISTORY'
+	},
+	search: {
+		SET_SEARCH_RESULTS: 'SET_SEARCH_RESULTS',
+		SET_IS_LOADING: 'SET_IS_LOADING'
 	}
 };

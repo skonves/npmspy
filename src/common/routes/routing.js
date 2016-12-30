@@ -9,10 +9,12 @@ import PackageHeader from '../components/PackageHeader';
 import PackageDetails from '../components/PackageDetails';
 import PackageDependencies from '../components/PackageDependencies';
 import PackageHistory from '../components/PackageHistory';
+import Search from '../components/Search';
 
 export default (
 	<Route path="/" component={App}>
 		<IndexRoute component={Home} />
+		<Route path="search" components={{ page: Search }} />
 		<Route path="packages" components={{ pageHeader: PackageHeader, page: Package }}>
 			<Route path=":versionId" component={PackageDetails} />
 			<Route path=":versionId/dependencies" component={PackageDependencies} />

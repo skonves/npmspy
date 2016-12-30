@@ -17,7 +17,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 createRepository({
 	auth: authStrategy,
 	numbers: numberStrategy,
-	packages: numberStrategy
+	packages: packageStrategy
 });
 
 let state = null;

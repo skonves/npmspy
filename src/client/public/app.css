@@ -63,6 +63,11 @@ ul.hierarchy li {
 	margin: 5px 0;
 }
 
+ul.inline li {
+	margin: 5px;
+	display: inline-block;
+}
+
 li, ul {
 	padding: 0;
 	margin: 0;
@@ -75,4 +80,23 @@ li, ul {
 
 .comment {
 	color: rgba(96, 139, 78, 1);
+}
+
+header .action-icon {
+	height: 64px !important;
+	width: 36px !important;
+}
+
+.chip {
+	border-radius: 16px;
+	border: 10px;
+	white-space: nowrap;
+	background-color: rgb(224, 224, 224);
+	display: flex;
+	line-height: 32px;
+	padding: 0 12px;
+
+	color: rgba(0, 0, 0, 0.870588);
+	font-size: 14px;
+	font-weight: 400;
 }

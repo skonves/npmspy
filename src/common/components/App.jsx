@@ -1,4 +1,7 @@
 import React, { Component, PropTypes } from 'react';
+import { Link } from 'react-router';
+
+import SearchIcon from 'material-ui/svg-icons/action/search';
 import AppBar from 'material-ui/AppBar';
 
 export default class App extends Component {
@@ -11,7 +14,9 @@ export default class App extends Component {
 		return (
 			<div>
 				<header>
-					<AppBar icon="" zDepth={0} title="Npm Spy - beta" />
+					<AppBar icon="" zDepth={0} title="Npm Spy - beta" >
+						<Link to="/search"><SearchIcon className="action-icon" color="white" /></Link>
+					</AppBar>
 					<div className="middled">{this.props.pageHeader}</div>
 				</header>
 				<section className="middled">

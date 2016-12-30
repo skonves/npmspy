@@ -2,7 +2,7 @@ import request from 'superagent';
 
 import operations from '../../common/constants/operations';
 
-const endpoint = 'http://localhost:3001';
+const endpoint = 'http://localhost:3000/api';
 
 function search(values) {
 	const query = (values || {}).query;
@@ -36,7 +36,7 @@ function getVersions(values) {
 function getDependencies(values) {
 	const packageId = (values || {}).packageId;
 	const version = (values || {}).version;
-	const ts = (values || {}).ts;
+	const ts = Number((values || {}).ts);
 
 	let uri = `${endpoint}/packages/${packageId}/versions/${version}`;
 	if (ts) {
@@ -57,9 +57,12 @@ function getDependencies(values) {
 function getHistory(values) {
 	const packageId = (values || {}).packageId;
 	const version = (values || {}).version;
-	const before = (values || {}).before;
+	const before = Number((values || {}).before);
 
-	const uri = `${endpoint}/packages/${packageId}/versions/${version}/history?before=${before}`;
+	let uri = `${endpoint}/packages/${packageId}/versions/${version}/history`;
+	if (before) {
+		uri = `${uri}?before=${before}`;
+	}
 
 	return new Promise((resolve, reject) => {
 		request.get(uri, (err, res) => {
@@ -74,6 +77,7 @@ function getHistory(values) {
 
 // NOTE: These switch options MUST MATCH the server-side strategy
 export default function (name, values) {
+
 	switch (name) {
 		case operations.packages.SEARCH:
 			return search(values);

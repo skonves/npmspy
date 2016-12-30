@@ -8,7 +8,7 @@ const app = express();
 
 app.get('/', (req, res) => {
 	const values = {
-		query: req.params.packageId
+		query: req.query.q
 	};
 
 	getRepository()

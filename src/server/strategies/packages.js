@@ -12,7 +12,7 @@ function search(values) {
 	const limit = 10;
 
 	return new Promise((resolve, reject) => {
-		request.get(`${endpoint}/packages/?q=${query}&offset=${offset}&limit=${limit}`, (err, res) => {
+		request.get(`${endpoint}/packages?q=${query}&offset=${offset}&limit=${limit}`, (err, res) => {
 			if (err) {
 				reject(err);
 			} else {
@@ -69,6 +69,18 @@ function getHistory(values) {
 
 	const uri = `${endpoint}/packages/${packageId}/versions/${version}/history?before=${before}&limit=${limit}`;
 
+	return new Promise((resolve, reject) => {
+		request.get(uri, (err, res) => {
+			if (err) {
+				reject(err);
+			} else {
+				resolve(res.body);
+			}
+		});
+	});
+}
+
+function get(uri) {
 	return new Promise((resolve, reject) => {
 		request.get(uri, (err, res) => {
 			if (err) {
