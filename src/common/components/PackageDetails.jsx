@@ -11,6 +11,12 @@ class PackageDetails extends Component {
 		store: React.PropTypes.object.isRequired,
 	};
 
+	componentWillMount() {
+		if (this.props.activeView !== 'details') {
+			this.props.setActiveView('details');
+		}
+	}
+
 	render() {
 		return (
 			<div className="comment">// TODO: fetch and show package details.</div>
@@ -19,11 +25,14 @@ class PackageDetails extends Component {
 }
 
 function mapStateToProps({ packageReducer }, ownProps) {
-	return { ...ownProps.params };
+	return { ...packageReducer, ...ownProps.params };
 }
 
 function mapDispatchToProps(dispatch, ownProps) {
 	return {
+		setActiveView: viewName => {
+			dispatch(setActiveView(viewName));
+		}
 	};
 }
 

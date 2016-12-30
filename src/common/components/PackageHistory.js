@@ -30,19 +30,18 @@ class PackageHistory extends Component {
 
 		function card(item) {
 			return (
-				<Card className="card">
-					<CardHeader title={moment(item.ts, 'x').fromNow()} subtitle={moment(item.ts, 'x').format()} />
-					<CardText>
-						<ul>{item.paths.map((path, i) => {
-							return (
-								<li key={i} className="changeset">
-									{diffLhs(path)}
-									{diffRhs(path)}
-								</li>
-							);
-						})}</ul>
-					</CardText>
-				</Card>
+				<li key={item.ts}>
+					<h1>{moment(item.ts, 'x').fromNow()}</h1>
+					<h2>{moment(item.ts, 'x').format()}</h2>
+					<ul className="changesets">{item.paths.map((path, i) => {
+						return (
+							<li key={i} >
+								{diffLhs(path)}
+								{diffRhs(path)}
+							</li>
+						);
+					})}</ul>
+				</li>
 			);
 		}
 
@@ -85,11 +84,9 @@ class PackageHistory extends Component {
 
 		return (
 			<div>
-				<ul>{(this.props.history || []).map(item => {
+				<ul className="cards">{(this.props.history || []).map(item => {
 					return (
-						<li key={item.ts}>
-							{card(item)}
-						</li>
+						card(item)
 					);
 				})}</ul>
 			</div>

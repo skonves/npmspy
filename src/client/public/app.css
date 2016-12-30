@@ -1,10 +1,12 @@
+
+/**********************
+  GENERAL
+**********************/
+
 body {
 	margin: 0;
 	font-family: 'Roboto', sans-serif;
-}
-
-header {
-	background-color: #00bcd4;
+	color: rgba(0, 0, 0, 0.870588);
 }
 
 .middled {
@@ -12,6 +14,69 @@ header {
 	margin: 0 auto;
 	padding: 0 20px;
 }
+
+li, ul {
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+
+.comment {
+	color: rgba(96, 139, 78, 1);
+}
+
+.cards ul.changesets {
+	margin-top: 2em;
+}
+
+/**********************
+  HEADER
+**********************/
+
+header {
+	background-color: #00bcd4;
+}
+
+header * {
+    color: #ffffff;
+}
+
+header h1 {
+	font-weight: 400;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    margin: 0 0 0 32px;
+    padding-top: 0;
+    letter-spacing: 0;
+    font-size: 24px;
+    overflow: hidden;
+    height: 64px;
+    line-height: 64px;
+}
+
+header .middled{
+	padding-left: 0;
+	padding-right: 0;
+}
+
+header ul.actions {
+	position: absolute;
+    top: 0;
+    right: 36px;
+}
+
+header ul.actions .icon {
+	height: 64px;
+	width: 36px;
+}
+
+header svg {
+  fill: currentColor;
+}
+
+/**********************
+  FOOTER
+**********************/
 
 footer {
 	text-align: center;
@@ -22,15 +87,22 @@ footer {
 	background-color: #00bcd4;
 }
 
-header .middled{
-	padding-left: 0;
-	padding-right: 0;
+/**********************
+  CHANGE SETS
+**********************/
+
+ul.changesets>li, .changeset {
+	padding-bottom: 1em;
 }
 
-div.lhs span {
+ul.changesets>li *, .changeset * {
+	font-size: 14px;
+} 
+
+ul.changesets>li .lhs span, .changeset .lhs span {
 	background-color: #ffecec;
 }
-div.lhs span.changed {
+ul.changesets>li .lhs span.changed, .changeset .lhs span.changed {
 	background-color: #f8cbcb;
 }
 div.rhs span {
@@ -43,9 +115,10 @@ div.lhs>span, div.rhs>span {
 	display: inline-block;
 	padding: 2px .5em;
 }
-li.changeset {
-	padding-bottom: 1em;
-}
+
+/**********************
+  HIERARCHY
+**********************/
 
 ul.hierarchy {
 	margin-left: 10px;
@@ -53,7 +126,7 @@ ul.hierarchy {
 	border-left: 1px solid #00bcd4;
 }
 
-ul.top.hierarchy {
+ul.hierarchy.top {
 	margin-left: 0;
 	padding-left: 0;
 	border-left: none;
@@ -63,28 +136,44 @@ ul.hierarchy li {
 	margin: 5px 0;
 }
 
+/**********************
+  CARDS
+**********************/
+
+ul.cards>li, .card {
+	margin: 20px 0;
+	padding: 20px;
+	-moz-box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.12);
+	-webkit-box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.12);
+	box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.12);
+	-moz-border-radius: 2px;
+	-webkit-border-radius: 2px;
+	border-radius: 2px;
+}
+
+ul.cards>li h1, .card h1 { /* heading */
+	color: rgba(0, 0, 0, 0.870588);
+    display: block;
+    font-size: 15px;
+    font-weight: 500;
+	margin: 0;
+}
+
+ul.cards>li h2, .card h2 { /* subheading */
+    color: rgba(0, 0, 0, 0.541176);
+    display: block;
+    font-size: 14px;
+	font-weight: 500;
+	margin: 0;
+}
+
+/**********************
+  CHIPS
+**********************/
+
 ul.inline li {
 	margin: 5px;
 	display: inline-block;
-}
-
-li, ul {
-	padding: 0;
-	margin: 0;
-	list-style: none;
-}
-
-.card {
-	margin: 20px 0;
-}
-
-.comment {
-	color: rgba(96, 139, 78, 1);
-}
-
-header .action-icon {
-	height: 64px !important;
-	width: 36px !important;
 }
 
 .chip {
@@ -99,4 +188,59 @@ header .action-icon {
 	color: rgba(0, 0, 0, 0.870588);
 	font-size: 14px;
 	font-weight: 400;
+}
+
+/**********************
+  TABS
+**********************/
+
+ul.tabs {
+	display: table;
+    table-layout: fixed;
+    width:100%;
+}
+
+ul.tabs>li {
+	display: table-cell;
+	vertical-align: middle;
+	border-bottom: 2px solid transparent;
+	height: 72px;
+	padding-top: auto;
+	padding-bottom: auto;
+}
+
+ul.tabs>li>* {
+	display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+ul.tabs * {
+	font-size: 14px;
+	color: rgba(255, 255, 255, 0.7);
+	font-weight: 500;
+	text-transform: uppercase;
+	text-align: center;
+}
+
+ul.tabs .icon {
+	height: 24px;
+	padding: 5px 0;
+}
+
+ul.tabs svg {
+  fill: currentColor;
+}
+
+ul.tabs a {
+	text-decoration: none;
+}
+
+ul.tabs li.active{
+	border-bottom: 2px solid rgb(255, 64, 129);
+}
+
+ul.tabs li.active *{
+	color: rgba(255, 255, 255, 1);
 }

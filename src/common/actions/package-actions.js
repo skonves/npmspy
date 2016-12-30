@@ -12,9 +12,10 @@ export function setPackage(packageId, version) {
 }
 
 export function setActiveView(activeView) {
+	const newActiveView = activeView === 'dependencies' || activeView === 'history' ? activeView : 'details';
 	return {
 		type: actionTypes.packages.SET_ACTIVE_VIEW,
-		payload: { activeView: activeView === 'dependencies' || activeView === 'history' ? activeView : 'details' }
+		payload: { activeView: newActiveView }
 	};
 }
 
