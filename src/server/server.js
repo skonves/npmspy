@@ -77,12 +77,10 @@ app.use((req, res, next) => {
 
 	const store = createStore(combinedReducers, initialState, applyMiddleware(thunk));
 
+	const routeProvider = routes(store.dispatch, store.getState);
+
 	// react-router
-	match({ routes, location: req.url }, (error, redirectLocation, renderProps) => {
-
-		//console.log(fetchVersionTree);
-		//packageActions.fetchVersionTree(renderProps.params.versionId)(store.dispatch).then(console.log('tree loaded'));
-
+	match({ routes: routeProvider, location: req.url }, (error, redirectLocation, renderProps) => {
 		if (error) {
 			return res.status(500).send(error.message);
 		}
@@ -96,99 +94,23 @@ app.use((req, res, next) => {
 			return res.status(404).send('Not found');
 		}
 
-		// console.log( '\nserver > renderProps: \n', require('util').inspect( renderProps, false, 1, true) )
-		// console.log( '\nserver > renderProps: \n', require('util').inspect( renderProps.components, false, 3, true) )
+		Promise.all([]).then(() => {
+			const initView = renderToString((
+				<Provider store={store}>
+					<RouterContext {...renderProps} />
+				</Provider>
+			));
 
-		// this is where universal rendering happens,
-		// fetchComponentData() will trigger actions listed in static "needs" props in each container component
-		// and wait for all of them to complete before continuing rendering the page,
-		// hence ensuring all data needed was fetched before proceeding
-		//
-		// renderProps: contains all necessary data, e.g: routes, router, history, components...
-		//fetchComponentData(store.dispatch, renderProps.components, renderProps.params)
+			let state = JSON.stringify(store.getState());
 
-		const { versionId } = renderProps.params;
-		const packageId = versionId && versionId.indexOf('@') > 0 ? versionId.substring(0, versionId.indexOf('@')) : undefined;
-		const version = versionId && versionId.indexOf('@') > 0 ? versionId.substring(versionId.indexOf('@') + 1) : undefined;
+			let page = renderFullPage(initView, state);
 
-		let todo = [];
+			return page;
+		})
 
-		const lastRoute = renderProps.routes[renderProps.routes.length - 1].path;
+		.then(page => res.status(200).send(page))
 
-		const fetchVersion = packageActions.fetchVersion(packageId, version)(store.dispatch);
-
-		if (lastRoute === ':versionId/dependencies') {
-			todo.push(fetchVersion);
-			todo.push(new Promise(resolve => {
-				store.dispatch(packageActions.setActiveView('dependencies'));
-				resolve();
-			}));
-		} else if (lastRoute === ':versionId/history') {
-			todo.push(fetchVersion);
-			todo.push(new Promise(resolve => {
-				store.dispatch(packageActions.setActiveView('history'));
-				resolve();
-			}));
-			//store.dispatch(packageActions.setActiveView('history'));
-		} else if (lastRoute === ':versionId') {
-			todo.push(fetchVersion);
-			todo.push(new Promise(resolve => {
-				store.dispatch(packageActions.setActiveView('details'));
-				resolve();
-			}));
-			//store.dispatch(packageActions.setActiveView('details'));
-		} else if (lastRoute === 'search') {
-			todo.push(searchActions.fetchSearchResults(renderProps.location.query.q)(store.dispatch));
-		}
-
-		Promise.all(todo
-			//[
-			//packageActions.fetchVersion(packageId, version)(store.dispatch)
-			// packageActions.fetchVersionTree(packageId, version)(store.dispatch),
-			// historyActions.fetchLatestHistory(packageId, version)(store.dispatch)
-		//]
-		)
-			//loadVersionTree
-			.then(() => {
-
-
-
-				const muiTheme = getMuiTheme({
-					palette: {
-						// primary1Color: green500,
-						// primary2Color: green700,
-						// primary3Color: green100,
-					},
-				}, {
-						avatar: {
-							borderColor: null,
-						},
-						userAgent: req.headers['user-agent'],
-					});
-
-				const initView = renderToString((
-					<Provider store={store}>
-						<MuiThemeProvider muiTheme={muiTheme}>
-							<RouterContext {...renderProps} />
-						</MuiThemeProvider>
-					</Provider>
-				));
-
-				// console.log('\ninitView:\n', initView);
-
-				let state = JSON.stringify(store.getState());
-				//console.log('\nstate: ', state);
-
-				let page = renderFullPage(initView, state);
-				// console.log( '\npage:\n', page );
-
-				return page;
-
-			})
-
-			.then(page => res.status(200).send(page))
-
-			.catch(err => res.end(err.message));
+		.catch(err => res.end(err.message));
 	});
 });
 

@@ -36,7 +36,7 @@ function clearUser(state, action) {
 }
 
 export default function (state = {}, action) {
-	console.log(action.type);
+	//console.log(action.type);
 	switch (action.type) {
 		case actionTypes.LOGIN_REQUEST:
 			return loggingIn(state, action);

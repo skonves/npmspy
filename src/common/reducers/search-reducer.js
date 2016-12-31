@@ -2,10 +2,7 @@ import actionTypes from '../actions/action-types';
 
 function setSearchResults(oldState, action) {
 	const newState = { ...oldState };
-
 	newState.searchResults = action.payload.searchResults;
-
-	console.log('@ reducer: ' + JSON.stringify(newState));
 	return newState;
 }
 

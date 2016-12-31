@@ -13,12 +13,12 @@ class Search extends Component {
 		store: React.PropTypes.object.isRequired,
 	};
 
-	componentWillMount() {
-		if (this.props.currentQuery !== this.props.location.query.q && this.props.location.query.q.length > 1) {
-			this.props.fetchSearchResults(this.props.location.query.q);
-			//browserHistory.replace(`/search?q=${}`);
-		}
-	}
+	// componentWillMount() {
+	// 	if (this.props.currentQuery !== this.props.location.query.q && this.props.location.query.q.length > 1) {
+	// 		this.props.fetchSearchResults(this.props.location.query.q);
+	// 		//browserHistory.replace(`/search?q=${}`);
+	// 	}
+	// }
 
 	handleChange = e => {
 		if (e.target.value && e.target.value.length > 1) {
@@ -76,9 +76,9 @@ function mapDispatchToProps(dispatch, ownProps) {
 		fetchSearchResults: query => {
 			dispatch(fetchSearchResults(query));
 		},
-		setActiveView: viewName => {
-			dispatch(setActiveView(viewName));
-		}
+		// setActiveView: viewName => {
+		// 	dispatch(setActiveView(viewName));
+		// }
 	};
 }
 

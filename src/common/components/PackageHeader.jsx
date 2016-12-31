@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Link, browserHistory } from 'react-router';
-import { navigateToView, setActiveView } from '../actions/package-actions';
 
 class PackageHeader extends Component {
 
@@ -11,6 +10,7 @@ class PackageHeader extends Component {
 
 	render() {
 		const baseRoute = `/packages/${this.props.packageId}@${this.props.version}`;
+		//console.log(JSON.stringify(this.props));
 		return (
 			<div>
 				<nav>
@@ -24,7 +24,7 @@ class PackageHeader extends Component {
 							</Link>
 						</li>
 						<li className={this.props.activeView === 'dependencies' ? 'active' : ''}>
-							<Link to={`${baseRoute}/dependencies`}>
+							<Link to={`${baseRoute}/dependencies${this.props.ts ? `?ts=${this.props.ts}` : '' }`}>
 								<svg height="20" className="icon" viewBox="0 0 24 24">
 									<path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z" />
 								</svg>
@@ -47,18 +47,8 @@ class PackageHeader extends Component {
 }
 
 function mapStateToProps({ packageReducer }, ownProps) {
-	return { ...packageReducer, ...ownProps.params };
+	const { packageId, version, activeView, ts } = packageReducer;
+	return { ...packageReducer, ...ownProps };
 }
 
-function mapDispatchToProps(dispatch, ownProps) {
-	return {
-		navigateToView: viewName => {
-			dispatch(navigateToView(viewName));
-		},
-		setActiveView: viewName => {
-			dispatch(setActiveView(viewName));
-		}
-	};
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(PackageHeader);
+export default connect(mapStateToProps)(PackageHeader);

@@ -4,10 +4,10 @@ import actionTypes from './action-types';
 import operations from '../constants/operations';
 import { browserHistory } from 'react-router';
 
-export function setPackage(packageId, version) {
+export function setPackage(packageId, version, ts) {
 	return {
 		type: actionTypes.packages.SET_PACKAGE,
-		payload: { packageId, version }
+		payload: { packageId, version, ts }
 	};
 }
 
@@ -82,9 +82,8 @@ export function navigateToView(viewName) {
 	};
 }
 
-export function fetchVersion(packageId, version) {
+export function fetchVersion(packageId, version, ts) {
 	return dispatch => {
-		const ts = new Date().getTime();
 		dispatch(setPackage(packageId, version, ts));
 		// TODO: load package details
 		dispatch(setDetails({ message: 'TODO' }));
@@ -117,18 +116,19 @@ export function fetchVersion(packageId, version) {
 
 export function fetchDependencies(packageId, version, ts) {
 	return dispatch => {
+		setPackage(packageId, version, ts);
 		dispatch(setPackage(packageId, version, ts));
 		// TODO: load package details
 		dispatch(setDependenciesAreLoading(true));
 
 		return getRepository()
-				.packages(operations.packages.GET_DEPENDENCIES, { packageId, version, ts })
-				.then(value => {
-					dispatch(setDependencies(value.dependencies));
-					dispatch(setDependenciesAreLoading(false));
-				})
-				.catch(reason => {
-					dispatch(setDependenciesAreLoading(false));
-				});
+			.packages(operations.packages.GET_DEPENDENCIES, { packageId, version, ts })
+			.then(value => {
+				dispatch(setDependencies(value.dependencies));
+				dispatch(setDependenciesAreLoading(false));
+			})
+			.catch(reason => {
+				dispatch(setDependenciesAreLoading(false));
+			});
 	};
 }

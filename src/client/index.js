@@ -32,7 +32,7 @@ const store = createStore(combinedReducers, state, applyMiddleware(thunk));
 render(
 	<Provider store={store}>
 		<MuiThemeProvider>
-			<Router history={browserHistory} routes={routes} />
+			<Router history={browserHistory} routes={routes(store.dispatch, store.getState)} />
 		</MuiThemeProvider>
 	</Provider>,
 	document.querySelector('#app')

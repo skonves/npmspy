@@ -1,7 +1,7 @@
 path = require('path');
 
 module.exports = {
-	//devtool: 'inline-source-map',
+	devtool: 'inline-source-map',
 	entry: ['./src/client/index.js'],
 	target: 'web',
 	output: {

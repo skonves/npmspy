@@ -16,7 +16,7 @@ function setPackage(oldState, action) {
 	const newState = { ...oldState };
 	newState.packageId = action.payload.packageId || newState.packageId;
 	newState.version = action.payload.version || newState.packageId;
-	newState.ts = action.payload.ts;
+	newState.ts = action.payload.ts ? Number(action.payload.ts) : undefined;
 	return newState;
 }
 

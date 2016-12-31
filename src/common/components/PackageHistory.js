@@ -2,27 +2,11 @@ import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import { setActiveView } from '../actions/package-actions';
-
 
 class PackageHistory extends Component {
-	// constructor(props) {
-	// 	super(props);
-
-	// 	if (this.props.setActiveView !== 'history') {
-	// 		this.props.setActiveView('history');
-	// 	}
-	// }
-
 	static contextTypes = {
 		store: React.PropTypes.object.isRequired,
 	};
-
-	componentWillMount() {
-		if (this.props.setActiveView !== 'history') {
-			this.props.setActiveView('history');
-		}
-	}
 
 	render() {
 		function prettyDate(ts) {
@@ -41,7 +25,7 @@ class PackageHistory extends Component {
 				<li key={item.ts}>
 					<h1>{moment(item.ts, 'x').fromNow()}</h1>
 					<h2>{moment(item.ts, 'x').format()}</h2>
-					<Link to={`/packages/${versionId}/dependencies?ts=${item.ts}`}>view at ... </Link>
+					<Link to={`/packages/${versionId}/dependencies?ts=${item.ts}`} onClick={() => window.scroll(0, 0)}>view at ... </Link>
 					<ul className="content changesets">{item.paths.map((path, i) => {
 						return (
 							<li key={i} >
@@ -108,12 +92,4 @@ function mapStateToProps({ packageReducer }, ownProps) {
 	return { ...packageReducer, ...ownProps.params };
 }
 
-function mapDispatchToProps(dispatch, ownProps) {
-	return {
-		setActiveView: viewName => {
-			dispatch(setActiveView(viewName));
-		}
-	};
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(PackageHistory);
+export default connect(mapStateToProps)(PackageHistory);

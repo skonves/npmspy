@@ -18,11 +18,11 @@ class PackageDetails extends Component {
 		store: React.PropTypes.object.isRequired,
 	};
 
-	componentWillMount() {
-		if (this.props.activeView !== 'details') {
-			this.props.setActiveView('details');
-		}
-	}
+	// componentWillMount() {
+	// 	if (this.props.activeView !== 'details') {
+	// 		this.props.setActiveView('details');
+	// 	}
+	// }
 
 	render() {
 		return (
@@ -35,12 +35,12 @@ function mapStateToProps({ packageReducer }, ownProps) {
 	return { ...packageReducer, ...ownProps.params };
 }
 
-function mapDispatchToProps(dispatch, ownProps) {
-	return {
-		setActiveView: viewName => {
-			dispatch(setActiveView(viewName));
-		}
-	};
-}
+// function mapDispatchToProps(dispatch, ownProps) {
+// 	return {
+// 		setActiveView: viewName => {
+// 			dispatch(setActiveView(viewName));
+// 		}
+// 	};
+// }
 
-export default connect(mapStateToProps, mapDispatchToProps)(PackageDetails);
+export default connect(mapStateToProps)(PackageDetails);
