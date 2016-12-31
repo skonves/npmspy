@@ -78,6 +78,10 @@ header ul.actions .icon {
 	width: 36px;
 }
 
+header .tab-container {
+	min-height: 72px
+}
+
 /**********************
   SEARCH BOX
 **********************/
@@ -98,6 +102,17 @@ form input[type=submit]{
 	display:none;
 }
 
+form.hero {
+	/*width: 780px;
+	height: 200px;
+	position: absolute;
+	top: 1%;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	margin: auto;*/
+}
+
 /**********************
   GLOW
 **********************/
@@ -113,19 +128,6 @@ form input[type=submit]{
 .glow:hover, .glow:focus {
   box-shadow: 0 0 5px #00bcd4;
   border: 1px solid rgba(0, 188, 212, .541176);
-}
-
-/**********************
-  FOOTER
-**********************/
-
-footer {
-	text-align: center;
-	color: white;
-	font-size: 75%;
-	padding: 35px 0;
-	margin-top: 35px;
-	background-color: #00bcd4;
 }
 
 /**********************
@@ -302,4 +304,36 @@ ul.tabs li.active{
 
 ul.tabs li.active *{
 	color: rgba(255, 255, 255, 1);
+}
+
+/**********************
+  FOOTER
+**********************/
+
+footer {
+	text-align: center;
+	color: white;
+	font-size: 75%;
+	line-height: 136px;
+	background-color: #00bcd4;
+}
+
+/**********************
+  STICKY FOOTER
+**********************/
+
+html, body, #app, #app>* {
+  height: 100%;
+}
+.page-wrap {
+  min-height: 100%;
+  /* equal to footer height */
+  margin-bottom: -136px; 
+}
+.page-wrap:after {
+  content: "";
+  display: block;
+}
+footer, .page-wrap:after {
+  height: 136px; 
 }
