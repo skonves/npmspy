@@ -1,15 +1,31 @@
 import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
 import { connect } from 'react-redux';
-import { setActiveView } from '../actions/package-actions';
+import { setActiveView, fetchDependencies } from '../actions/package-actions';
 
 class PackageDependencies extends Component {
+	// constructor(props) {
+	// 	super(props);
+
+
+
+	// 	// if (this.props.setActiveView !== 'dependencies') {
+	// 	// 	this.props.setActiveView('dependencies');
+	// 	// }
+	// }
 
 	static contextTypes = {
 		store: React.PropTypes.object.isRequired,
 	};
 
 	componentWillMount() {
+		const ts = this.props.location.query.ts || new Date().getTime();
+
+		if (this.props.params.versionId !== this.props.versionId || Math.abs(ts - this.props.ts) > 3600000) {
+			console.log('@PackageDependencies.ctor: re-fetching deps');
+			this.props.fetchDependencies(this.props.packageId, this.props.version, ts);
+		}
+
 		if (this.props.setActiveView !== 'dependencies') {
 			this.props.setActiveView('dependencies');
 		}

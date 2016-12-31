@@ -54,6 +54,13 @@ export function setDependencies(dependencies) {
 	};
 }
 
+export function setHistory(historyItems) {
+	return {
+		type: actionTypes.packages.SET_HISTORY,
+		payload: { historyItems }
+	};
+}
+
 export function appendHistory(historyItems) {
 	return {
 		type: actionTypes.packages.APPEND_HISTORY,
@@ -77,7 +84,8 @@ export function navigateToView(viewName) {
 
 export function fetchVersion(packageId, version) {
 	return dispatch => {
-		dispatch(setPackage(packageId, version));
+		const ts = new Date().getTime();
+		dispatch(setPackage(packageId, version, ts));
 		// TODO: load package details
 		dispatch(setDetails({ message: 'TODO' }));
 		dispatch(setDependenciesAreLoading(true));
@@ -86,7 +94,7 @@ export function fetchVersion(packageId, version) {
 		return Promise.all([
 			// TODO: load package details
 			getRepository()
-				.packages(operations.packages.GET_DEPENDENCIES, { packageId, version })
+				.packages(operations.packages.GET_DEPENDENCIES, { packageId, version, ts })
 				.then(value => {
 					dispatch(setDependencies(value.dependencies));
 					dispatch(setDependenciesAreLoading(false));
@@ -97,12 +105,30 @@ export function fetchVersion(packageId, version) {
 			getRepository()
 				.packages(operations.packages.GET_HISTORY, { packageId, version })
 				.then(value => {
-					dispatch(appendHistory(value.history));
+					dispatch(setHistory(value.history));
 					dispatch(setHistoryIsLoading(false));
 				})
 				.catch(reason => {
 					dispatch(setHistoryIsLoading(false));
 				})
 		]);
+	};
+}
+
+export function fetchDependencies(packageId, version, ts) {
+	return dispatch => {
+		dispatch(setPackage(packageId, version, ts));
+		// TODO: load package details
+		dispatch(setDependenciesAreLoading(true));
+
+		return getRepository()
+				.packages(operations.packages.GET_DEPENDENCIES, { packageId, version, ts })
+				.then(value => {
+					dispatch(setDependencies(value.dependencies));
+					dispatch(setDependenciesAreLoading(false));
+				})
+				.catch(reason => {
+					dispatch(setDependenciesAreLoading(false));
+				});
 	};
 }

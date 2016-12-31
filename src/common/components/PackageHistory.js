@@ -1,12 +1,18 @@
 import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 import { setActiveView } from '../actions/package-actions';
 
-import RaisedButton from 'material-ui/RaisedButton';
-import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
 
 class PackageHistory extends Component {
+	// constructor(props) {
+	// 	super(props);
+
+	// 	if (this.props.setActiveView !== 'history') {
+	// 		this.props.setActiveView('history');
+	// 	}
+	// }
 
 	static contextTypes = {
 		store: React.PropTypes.object.isRequired,
@@ -28,11 +34,14 @@ class PackageHistory extends Component {
 			}
 		}
 
+		const versionId = `${this.props.packageId}@${this.props.version}`;
+
 		function card(item) {
 			return (
 				<li key={item.ts}>
 					<h1>{moment(item.ts, 'x').fromNow()}</h1>
 					<h2>{moment(item.ts, 'x').format()}</h2>
+					<Link to={`/packages/${versionId}/dependencies?ts=${item.ts}`}>view at ... </Link>
 					<ul className="content changesets">{item.paths.map((path, i) => {
 						return (
 							<li key={i} >
@@ -94,9 +103,9 @@ class PackageHistory extends Component {
 	}
 }
 
-function mapStateToProps({ historyReducer }, ownProps) {
+function mapStateToProps({ packageReducer }, ownProps) {
 	//console.log(ownProps.params);
-	return { ...historyReducer, ...ownProps.params };
+	return { ...packageReducer, ...ownProps.params };
 }
 
 function mapDispatchToProps(dispatch, ownProps) {

@@ -31,7 +31,7 @@ class Search extends Component {
 	render() {
 		return (
 			<div>
-				<form onSubmit={this.handleChange}>
+				<form className={(this.props.searchResults || []).length < 1 ? 'hero' : ''} onSubmit={this.handleChange}>
 					<input
 						className="glow"
 						type="search"

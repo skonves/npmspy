@@ -16,6 +16,7 @@ function setPackage(oldState, action) {
 	const newState = { ...oldState };
 	newState.packageId = action.payload.packageId || newState.packageId;
 	newState.version = action.payload.version || newState.packageId;
+	newState.ts = action.payload.ts;
 	return newState;
 }
 
@@ -55,6 +56,12 @@ function setDependencies(oldState, action) {
 	return newState;
 }
 
+function setHistory(oldState, action) {
+	const newState = { ...oldState };
+	newState.history = action.payload.historyItems.sort((a, b) => b.ts - a.ts);
+	return newState;
+}
+
 function appendHistory(oldState, action) {
 	const newState = { ...oldState };
 	let history = newState.history || [];
@@ -81,6 +88,8 @@ export default function (state = { }, action) {
 			return setDetails(state, action);
 		case actionTypes.packages.SET_DEPENDENCIES:
 			return setDependencies(state, action);
+		case actionTypes.packages.SET_HISTORY:
+			return setHistory(state, action);
 		case actionTypes.packages.APPEND_HISTORY:
 			return appendHistory(state, action);
 		default:

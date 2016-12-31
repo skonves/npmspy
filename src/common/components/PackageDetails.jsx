@@ -6,6 +6,13 @@ import { setActiveView } from '../actions/package-actions';
 import RaisedButton from 'material-ui/RaisedButton';
 
 class PackageDetails extends Component {
+	// constructor(props) {
+	// 	super(props);
+
+	// 	if (this.props.setActiveView !== 'details') {
+	// 		this.props.setActiveView('details');
+	// 	}
+	// }
 
 	static contextTypes = {
 		store: React.PropTypes.object.isRequired,

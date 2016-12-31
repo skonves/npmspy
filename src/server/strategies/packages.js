@@ -42,7 +42,7 @@ function getVersions(values) {
 function getDependencies(values) {
 	const packageId = (values || {}).packageId;
 	const version = (values || {}).version;
-	const ts = (values || {}).ts;
+	const ts = Number((values || {}).ts);
 
 	let uri = `${endpoint}/packages/${packageId}/versions/${version}`;
 	if (ts) {
