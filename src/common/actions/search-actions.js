@@ -19,9 +19,17 @@ export function setIsLoading(isLoading) {
 	};
 }
 
+export function setCurrentQuery(query) {
+	return {
+		type: actionTypes.search.SET_CURRENT_QUERY,
+		payload: { query }
+	};
+}
+
 export function fetchSearchResults(query) {
 	return dispatch => {
 		dispatch(setIsLoading(true));
+		dispatch(setCurrentQuery(query));
 
 		return getRepository()
 			.packages(operations.packages.SEARCH, { query })

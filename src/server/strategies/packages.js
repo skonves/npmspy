@@ -6,7 +6,7 @@ import operations from '../../common/constants/operations';
 const endpoint = 'http://localhost:3001';
 
 function search(values) {
-	const query = (values || {}).query;
+	const query = ((values || {}).query || '').toLowerCase();
 
 	const offset = 0;
 	const limit = 10;

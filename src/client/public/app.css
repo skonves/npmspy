@@ -25,8 +25,16 @@ li, ul {
 	color: rgba(96, 139, 78, 1);
 }
 
-.cards ul.changesets {
-	margin-top: 2em;
+svg {
+  fill: currentColor;
+}
+
+* {
+	-webkit-transition: all 0.30s ease-in-out;
+	-moz-transition: all 0.30s ease-in-out;
+	-ms-transition: all 0.30s ease-in-out;
+	-o-transition: all 0.30s ease-in-out;
+	transition: all 0.30s ease-in-out;
 }
 
 /**********************
@@ -70,8 +78,41 @@ header ul.actions .icon {
 	width: 36px;
 }
 
-header svg {
-  fill: currentColor;
+/**********************
+  SEARCH BOX
+**********************/
+
+form input[type=search] {
+	border-radius: 25px;
+	-webkit-appearance: none;
+	height: 50px;
+	padding: 5px 25px;
+	margin: 25px 0;
+	width: 100%;
+	font-size: 24px;
+	outline: none;
+	border: 1px solid #DDDDDD;
+}
+
+form input[type=submit]{
+	display:none;
+}
+
+/**********************
+  GLOW
+**********************/
+
+/*.glow {
+	-webkit-transition: all 0.30s ease-in-out;
+	-moz-transition: all 0.30s ease-in-out;
+	-ms-transition: all 0.30s ease-in-out;
+	-o-transition: all 0.30s ease-in-out;
+	transition: all 0.30s ease-in-out;
+}*/
+
+.glow:hover, .glow:focus {
+  box-shadow: 0 0 5px #00bcd4;
+  border: 1px solid rgba(0, 188, 212, .541176);
 }
 
 /**********************
@@ -151,7 +192,13 @@ ul.cards>li, .card {
 	border-radius: 2px;
 }
 
-ul.cards>li h1, .card h1 { /* heading */
+/*ul.cards>li:hover, .card:hover { /* cool but annoying hover animation * /
+	-moz-box-shadow: 0 1px 18px rgba(0, 0, 0, 0.12), 0 1px 12px rgba(0, 0, 0, 0.12);
+	-webkit-box-shadow: 0 1px 18px rgba(0, 0, 0, 0.12), 0 1px 12px rgba(0, 0, 0, 0.12);
+	box-shadow: 0 1px 18px rgba(0, 0, 0, 0.12), 0 1px 12px rgba(0, 0, 0, 0.12);
+}*/
+
+ul.cards>li>h1, .card>h1 { /* heading */
 	color: rgba(0, 0, 0, 0.870588);
     display: block;
     font-size: 15px;
@@ -159,7 +206,7 @@ ul.cards>li h1, .card h1 { /* heading */
 	margin: 0;
 }
 
-ul.cards>li h2, .card h2 { /* subheading */
+ul.cards>li>h2, .card>h2 { /* subheading */
     color: rgba(0, 0, 0, 0.541176);
     display: block;
     font-size: 14px;
@@ -167,20 +214,24 @@ ul.cards>li h2, .card h2 { /* subheading */
 	margin: 0;
 }
 
+ul.cards>li>.content, .card>.content {  /* content */
+	margin-top: 2em;
+    font-size: 14px;
+}
+
 /**********************
   CHIPS
 **********************/
 
-ul.inline li {
-	margin: 5px;
+ul.chips>li, .chip {
+	margin: 5px 10px 5px 0;
 	display: inline-block;
+	border-radius: 16px;
+	background-color: rgb(224, 224, 224);
 }
 
-.chip {
-	border-radius: 16px;
-	border: 10px;
+ul.chips>li>*, .chip>* {
 	white-space: nowrap;
-	background-color: rgb(224, 224, 224);
 	display: flex;
 	line-height: 32px;
 	padding: 0 12px;
@@ -188,6 +239,10 @@ ul.inline li {
 	color: rgba(0, 0, 0, 0.870588);
 	font-size: 14px;
 	font-weight: 400;
+}
+
+ul.chips>li> a, .chip> a {
+	text-decoration: none;
 }
 
 /**********************
@@ -209,6 +264,14 @@ ul.tabs>li {
 	padding-bottom: auto;
 }
 
+ul.tabs * {
+	-webkit-transition: all 0.30s ease-in-out;
+	-moz-transition: all 0.30s ease-in-out;
+	-ms-transition: all 0.30s ease-in-out;
+	-o-transition: all 0.30s ease-in-out;
+	transition: all 0.30s ease-in-out;
+}
+
 ul.tabs>li>* {
 	display: flex;
     flex-direction: column;
@@ -227,10 +290,6 @@ ul.tabs * {
 ul.tabs .icon {
 	height: 24px;
 	padding: 5px 0;
-}
-
-ul.tabs svg {
-  fill: currentColor;
 }
 
 ul.tabs a {

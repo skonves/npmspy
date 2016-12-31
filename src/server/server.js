@@ -26,7 +26,7 @@ import packageStrategy from './strategies/packages';
 import cookieParser from 'cookie-parser';
 
 import * as packageActions from '../common/actions/package-actions';
-import * as historyActions from '../common/actions/history-actions';
+import * as searchActions from '../common/actions/search-actions';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -111,23 +111,47 @@ app.use((req, res, next) => {
 		const packageId = versionId && versionId.indexOf('@') > 0 ? versionId.substring(0, versionId.indexOf('@')) : undefined;
 		const version = versionId && versionId.indexOf('@') > 0 ? versionId.substring(versionId.indexOf('@') + 1) : undefined;
 
-		Promise.all([
-			packageActions.fetchVersion(packageId, version)(store.dispatch)
+		let todo = [];
+
+		const lastRoute = renderProps.routes[renderProps.routes.length - 1].path;
+
+		const fetchVersion = packageActions.fetchVersion(packageId, version)(store.dispatch);
+
+		if (lastRoute === ':versionId/dependencies') {
+			todo.push(fetchVersion);
+			todo.push(new Promise(resolve => {
+				store.dispatch(packageActions.setActiveView('dependencies'));
+				resolve();
+			}));
+		} else if (lastRoute === ':versionId/history') {
+			todo.push(fetchVersion);
+			todo.push(new Promise(resolve => {
+				store.dispatch(packageActions.setActiveView('history'));
+				resolve();
+			}));
+			//store.dispatch(packageActions.setActiveView('history'));
+		} else if (lastRoute === ':versionId') {
+			todo.push(fetchVersion);
+			todo.push(new Promise(resolve => {
+				store.dispatch(packageActions.setActiveView('details'));
+				resolve();
+			}));
+			//store.dispatch(packageActions.setActiveView('details'));
+		} else if (lastRoute === 'search') {
+			todo.push(searchActions.fetchSearchResults(renderProps.location.query.q)(store.dispatch));
+		}
+
+		Promise.all(todo
+			//[
+			//packageActions.fetchVersion(packageId, version)(store.dispatch)
 			// packageActions.fetchVersionTree(packageId, version)(store.dispatch),
 			// historyActions.fetchLatestHistory(packageId, version)(store.dispatch)
-		])
+		//]
+		)
 			//loadVersionTree
 			.then(() => {
 
-				const lastRoute = renderProps.routes[renderProps.routes.length - 1].path;
 
-				if (lastRoute === ':versionId/dependencies') {
-					store.dispatch(packageActions.setActiveView('dependencies'));
-				} else if (lastRoute === ':versionId/history') {
-					store.dispatch(packageActions.setActiveView('history'));
-				} else {
-					store.dispatch(packageActions.setActiveView('details'));
-				}
 
 				const muiTheme = getMuiTheme({
 					palette: {
@@ -136,11 +160,11 @@ app.use((req, res, next) => {
 						// primary3Color: green100,
 					},
 				}, {
-					avatar: {
-						borderColor: null,
-					},
-					userAgent: req.headers['user-agent'],
-				});
+						avatar: {
+							borderColor: null,
+						},
+						userAgent: req.headers['user-agent'],
+					});
 
 				const initView = renderToString((
 					<Provider store={store}>

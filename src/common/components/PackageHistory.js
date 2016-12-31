@@ -33,7 +33,7 @@ class PackageHistory extends Component {
 				<li key={item.ts}>
 					<h1>{moment(item.ts, 'x').fromNow()}</h1>
 					<h2>{moment(item.ts, 'x').format()}</h2>
-					<ul className="changesets">{item.paths.map((path, i) => {
+					<ul className="content changesets">{item.paths.map((path, i) => {
 						return (
 							<li key={i} >
 								{diffLhs(path)}
