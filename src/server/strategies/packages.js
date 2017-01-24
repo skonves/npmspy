@@ -3,7 +3,7 @@ import request from 'superagent';
 import operations from '../../common/constants/operations';
 
 // TODO: promote endpoint to a config file
-const endpoint = 'http://localhost:3001';
+const endpoint = 'https://api.npmspy.com'; //'http://localhost:3001';
 
 function search(values) {
 	const query = ((values || {}).query || '').toLowerCase();
