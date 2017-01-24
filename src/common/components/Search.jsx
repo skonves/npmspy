@@ -8,6 +8,10 @@ import { setActiveView } from '../actions/package-actions';
 import TextField from 'material-ui/TextField';
 
 class Search extends Component {
+	constructor(props) {
+		super(props);
+		this.state = { };
+	}
 
 	static contextTypes = {
 		store: React.PropTypes.object.isRequired,
@@ -23,8 +27,15 @@ class Search extends Component {
 	handleChange = e => {
 		if (e.target.value && e.target.value.length > 1) {
 			//this.props.setActiveView('details');
-			browserHistory.replace(`/search?q=${e.target.value}`);
-			this.props.fetchSearchResults(e.target.value);
+
+			if (this.state.timeout) {
+				clearTimeout(this.state.timeout);
+			}
+
+			this.state.timeout = setTimeout(q => {
+				browserHistory.replace(`/search?q=${q}`);
+				this.props.fetchSearchResults(q);
+			}, 1200, e.target.value);
 		}
 	}
 
@@ -41,7 +52,7 @@ class Search extends Component {
 					<input type="submit" value="Search" />
 				</form>
 				<ul className="cards">
-					{(this.props.searchResults || []).map( (result, i) => {
+					{(this.props.searchResults || []).map((result, i) => {
 						return (
 							<li key={i}>
 								<h1>{result.id}</h1>
