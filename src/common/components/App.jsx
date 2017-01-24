@@ -15,7 +15,7 @@ export default class App extends Component {
 			<div>
 				<div className="page-wrap">
 					<header>
-						<h1>Npm Spy - beta</h1>
+						<h1>Npm Spy - very beta</h1>
 						<ul className="actions">
 							<li>
 								<Link to="/search">
@@ -33,7 +33,7 @@ export default class App extends Component {
 				</div>
 				<footer>
 					<div className="middled">{this.props.pageFooter}</div>
-					<div className="middled">made with 🤓 by steve konves</div>
+					<div className="middled">made with <a href="https://github.com/skonves/nerrd-stack">🤓</a> by steve konves</div>
 				</footer>
 			</div>
 		);

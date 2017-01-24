@@ -119,9 +119,9 @@ function renderFullPage(html, initialState) {
 	<!doctype html>
 	<html lang="utf-8">
 	  <head>
-		<title>Universal Redux Example</title>
+		<title>npmspy.com</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<link rel="shortcut icon" type="image/png" href="assets/images/react.png">
+		<!--<link rel="shortcut icon" type="image/png" href="assets/images/react.png">-->
 		<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
 		<link href="/dist/styles/app.css" rel="stylesheet">
 	  </head>
