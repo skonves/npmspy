@@ -8,7 +8,7 @@ import Package from '../components/Package';
 import PackageHeader from '../components/PackageHeader';
 import PackageDetails from '../components/PackageDetails';
 import PackageDependencies from '../components/PackageDependencies';
-import PackageHistory from '../components/PackageHistory';
+import PackageDiff from '../components/PackageDiff';
 import Search from '../components/Search';
 
 import { fetchVersion, setActiveView, fetchDependencies } from '../actions/package-actions';
@@ -22,7 +22,7 @@ export default (dispatch, getState) => {
 			<Route path="packages" components={{ pageHeader: PackageHeader, page: Package }} onEnter={initPackage} >
 				<Route path=":versionId" component={PackageDetails} onEnter={initDetails} />
 				<Route path=":versionId/dependencies" component={PackageDependencies} onEnter={initDependencies} />
-				<Route path=":versionId/history" component={PackageHistory} />
+				<Route path=":versionId/diff" component={PackageDiff} onEnter={initDiff} />
 			</Route>
 		</Route>
 	);
@@ -71,9 +71,9 @@ export default (dispatch, getState) => {
 
 	}
 
-	function initHistory(nextState, replace) {
-		console.log('initializing history');
-		dispatch(setActiveView('history'));
+	function initDiff(nextState, replace) {
+		console.log('initializing diff');
+		dispatch(setActiveView('diff'));
 	}
 
 	function initSearch(nextState, replace, callback) {

@@ -3,7 +3,7 @@ import actionTypes from '../actions/action-types';
 const exampleState = {
 	packageId: 'example',
 	version: '0.0.1',
-	activeView: 'details|dependencies|history',
+	activeView: 'details|dependencies|diff',
 	detailsAreLoading: false,
 	dependenciesAreLoading: false,
 	historyIsLoading: false,

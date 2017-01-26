@@ -12,7 +12,7 @@ export function setPackage(packageId, version, ts) {
 }
 
 export function setActiveView(activeView) {
-	const newActiveView = activeView === 'dependencies' || activeView === 'history' ? activeView : 'details';
+	const newActiveView = activeView === 'dependencies' || activeView === 'diff' ? activeView : 'details';
 	return {
 		type: actionTypes.packages.SET_ACTIVE_VIEW,
 		payload: { activeView: newActiveView }
@@ -72,7 +72,7 @@ export function navigateToView(viewName) {
 	return (dispatch, getState) => {
 
 		const state = getState().packageReducer;
-		viewName = viewName === 'dependencies' || viewName === 'history' ? '/' + viewName : '';
+		viewName = viewName === 'dependencies' || viewName === 'diff' ? '/' + viewName : '';
 
 		dispatch(setActiveView(viewName));
 
