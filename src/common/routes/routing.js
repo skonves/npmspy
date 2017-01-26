@@ -22,7 +22,7 @@ export default (dispatch, getState) => {
 			<Route path="packages" components={{ pageHeader: PackageHeader, page: Package }} onEnter={initPackage} >
 				<Route path=":versionId" component={PackageDetails} onEnter={initDetails} />
 				<Route path=":versionId/dependencies" component={PackageDependencies} onEnter={initDependencies} />
-				<Route path=":versionId/diff" component={PackageDiff} onEnter={initDiff} />
+				<Route path=":versionId/diff/:rhsversion" component={PackageDiff} onEnter={initDiff} />
 			</Route>
 		</Route>
 	);
@@ -35,8 +35,10 @@ export default (dispatch, getState) => {
 			`${state.packageId}@${state.version}` !== nextState.params.versionId
 		) {
 			const parts = nextState.params.versionId.split('@');
-			fetchVersion(parts[0], parts[1], nextState.location.query.ts)(dispatch)
-				.then(() => callback())
+			fetchVersion(parts[0], parts[1], nextState.location.query.ts, nextState.params.rhsversion, nextState.location.query.rhsts)(dispatch)
+				.then(() => {
+					callback();
+				})
 				.catch(reason => callback(reason));
 		} else {
 			callback();
@@ -63,7 +65,9 @@ export default (dispatch, getState) => {
 		) {
 			const parts = nextState.params.versionId.split('@');
 			fetchDependencies(parts[0], parts[1], nextState.location.query.ts)(dispatch)
-				.then(() => callback())
+				.then(() =>
+					callback()
+				)
 				.catch(reason => callback(reason));
 		} else {
 			callback();

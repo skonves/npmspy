@@ -4,10 +4,10 @@ import actionTypes from './action-types';
 import operations from '../constants/operations';
 import { browserHistory } from 'react-router';
 
-export function setPackage(packageId, version, ts) {
+export function setPackage(packageId, version, ts, rhsversion, rhsts) {
 	return {
 		type: actionTypes.packages.SET_PACKAGE,
-		payload: { packageId, version, ts }
+		payload: { packageId, version, ts, rhsversion: rhsversion || version, rhsts: rhsts || ts }
 	};
 }
 
@@ -33,9 +33,9 @@ export function setDependenciesAreLoading(isLoading) {
 	};
 }
 
-export function setHistoryIsLoading(isLoading) {
+export function setDiffIsLoading(isLoading) {
 	return {
-		type: actionTypes.packages.SET_HISTORY_IS_LOADING,
+		type: actionTypes.packages.SET_DIFF_IS_LOADING,
 		payload: { isLoading }
 	};
 }
@@ -47,6 +47,20 @@ export function setDetails(details) {
 	};
 }
 
+export function setDiff(diff) {
+	return {
+		type: actionTypes.packages.SET_DIFF,
+		payload: { diff }
+	};
+}
+
+export function setDiffRhs(rhsversion, rhsts) {
+	return {
+		type: actionTypes.packages.SET_DIFF_RHS,
+		payload: { rhsversion, rhsts }
+	};
+}
+
 export function setDependencies(dependencies) {
 	return {
 		type: actionTypes.packages.SET_DEPENDENCIES,
@@ -54,41 +68,28 @@ export function setDependencies(dependencies) {
 	};
 }
 
-export function setHistory(historyItems) {
-	return {
-		type: actionTypes.packages.SET_HISTORY,
-		payload: { historyItems }
-	};
-}
-
-export function appendHistory(historyItems) {
-	return {
-		type: actionTypes.packages.APPEND_HISTORY,
-		payload: { historyItems }
-	};
-}
-
-export function navigateToView(viewName) {
-	return (dispatch, getState) => {
-
-		const state = getState().packageReducer;
-		viewName = viewName === 'dependencies' || viewName === 'diff' ? '/' + viewName : '';
-
-		dispatch(setActiveView(viewName));
-
-		return new Promise(resolve => {
-			browserHistory.push(`/packages/${state.packageId}@${state.version}${viewName}`);
-		});
-	};
-}
-
-export function fetchVersion(packageId, version, ts) {
+export function fetchDiff(packageId, version, ts, rhsversion, rhsts) {
 	return dispatch => {
-		dispatch(setPackage(packageId, version, ts));
+		return getRepository()
+			.packages(operations.packages.GET_DIFF, { packageId, version, ts, rhsversion, rhsts })
+			.then(value => {
+				dispatch(setDependencies(value.dependencies));
+				dispatch(setDependenciesAreLoading(false));
+				dispatch(setDiffRhs(rhsversion, rhsts));
+			})
+			.catch(reason => {
+				dispatch(setDependenciesAreLoading(false));
+			});
+	};
+}
+
+export function fetchVersion(packageId, version, ts, rhsversion, rhsts) {
+	return dispatch => {
+		dispatch(setPackage(packageId, version, ts, rhsversion, rhsts));
 		// TODO: load package details
 		dispatch(setDetails({ message: 'TODO' }));
 		dispatch(setDependenciesAreLoading(true));
-		dispatch(setHistoryIsLoading(true));
+		dispatch(setDiffIsLoading(true));
 
 		return Promise.all([
 			// TODO: load package details
@@ -102,13 +103,13 @@ export function fetchVersion(packageId, version, ts) {
 					dispatch(setDependenciesAreLoading(false));
 				}),
 			getRepository()
-				.packages(operations.packages.GET_HISTORY, { packageId, version })
+				.packages(operations.packages.GET_DIFF, { packageId, version, ts, rhsversion, rhsts })
 				.then(value => {
-					dispatch(setHistory(value.history));
-					dispatch(setHistoryIsLoading(false));
+					dispatch(setDiff(value));
+					dispatch(setDiffIsLoading(false));
 				})
 				.catch(reason => {
-					dispatch(setHistoryIsLoading(false));
+					dispatch(setDiffIsLoading(false));
 				})
 		]);
 	};

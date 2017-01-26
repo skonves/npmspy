@@ -17,6 +17,8 @@ function setPackage(oldState, action) {
 	newState.packageId = action.payload.packageId || newState.packageId;
 	newState.version = action.payload.version || newState.packageId;
 	newState.ts = action.payload.ts ? Number(action.payload.ts) : undefined;
+	newState.rhsversion = action.payload.rhsversion || newState.rhsversion;
+	newState.rhsts = action.payload.rhsts ? Number(action.payload.rhsts) : undefined;
 	return newState;
 }
 
@@ -32,15 +34,15 @@ function setDetailsAreLoading(oldState, action) {
 	return newState;
 }
 
-function setDependenciesAreLoading(oldState, action) {
+function setDiffIsLoading(oldState, action) {
 	const newState = { ...oldState };
-	newState.dependenciesAreLoading = action.payload.isLoading;
+	newState.setDiffIsLoading = action.payload.isLoading;
 	return newState;
 }
 
-function setHistoryIsLoading(oldState, action) {
+function setDependenciesAreLoading(oldState, action) {
 	const newState = { ...oldState };
-	newState.historyIsLoading = action.payload.isLoading;
+	newState.dependenciesAreLoading = action.payload.isLoading;
 	return newState;
 }
 
@@ -50,29 +52,26 @@ function setDetails(oldState, action) {
 	return newState;
 }
 
+function setDiff(oldState, action) {
+	const newState = { ...oldState };
+	newState.diff = action.payload.diff;
+	return newState;
+}
+
+function setDiffRhs(oldState, action) {
+	const newState = { ...oldState };
+	newState.rhsversion = action.payload.rhsversion;
+	newState.rhsts = action.payload.rhsts;
+	return newState;
+}
+
 function setDependencies(oldState, action) {
 	const newState = { ...oldState };
 	newState.dependencies = action.payload.dependencies;
 	return newState;
 }
 
-function setHistory(oldState, action) {
-	const newState = { ...oldState };
-	newState.history = action.payload.historyItems.sort((a, b) => b.ts - a.ts);
-	return newState;
-}
-
-function appendHistory(oldState, action) {
-	const newState = { ...oldState };
-	let history = newState.history || [];
-	action.payload.historyItems.forEach(item => history.push(item));
-
-	// TODO: remove potential duplicate ts values
-	newState.history = history.sort((a, b) => b.ts - a.ts);
-	return newState;
-}
-
-export default function (state = { }, action) {
+export default function (state = {}, action) {
 	switch (action.type) {
 		case actionTypes.packages.SET_PACKAGE:
 			return setPackage(state, action);
@@ -80,18 +79,18 @@ export default function (state = { }, action) {
 			return setActiveView(state, action);
 		case actionTypes.packages.SET_DETAILS_ARE_LOADING:
 			return setDetailsAreLoading(state, action);
+		case actionTypes.packages.SET_DIFF_IS_LOADING:
+			return setDiffIsLoading(state, action);
 		case actionTypes.packages.SET_DEPENDENCIES_ARE_LOADING:
 			return setDependenciesAreLoading(state, action);
-		case actionTypes.packages.SET_HISTORY_IS_LOADING:
-			return setHistoryIsLoading(state, action);
 		case actionTypes.packages.SET_DETAILS:
 			return setDetails(state, action);
+		case actionTypes.packages.SET_DIFF:
+			return setDiff(state, action);
+		case actionTypes.packages.SET_DIFF_RHS:
+			return setDiffRhs(state, action);
 		case actionTypes.packages.SET_DEPENDENCIES:
 			return setDependencies(state, action);
-		case actionTypes.packages.SET_HISTORY:
-			return setHistory(state, action);
-		case actionTypes.packages.APPEND_HISTORY:
-			return appendHistory(state, action);
 		default:
 			return state;
 	}

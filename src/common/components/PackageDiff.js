@@ -11,9 +11,18 @@ class PackageDiff extends Component {
 
 	render() {
 		function renderTree(id, node, key) {
+			let liClass;
+			if (node.$diff) {
+				if (node.$diff.type === 'ADDED') {
+					liClass = 'added';
+				} else if (node.$diff.type === 'REMOVED') {
+					liClass = 'removed';
+				}
+			}
+
 			return (
-				<li key={key}>
-					<div>{id}@{node.version}</div>
+				<li className={liClass} key={key}>
+					<div>{id}@<span className={node.$diff && node.$diff.type === 'VERSION' ? 'changed' : ''}>{node.version}</span> {node.$diff && node.$diff.uri ? (<a target="_blank" rel="noopener noreferrer" href={node.$diff.uri}>diff</a>) : ''}</div>
 					<ul className="hierarchy">
 						{Object.keys(node.dependencies || {}).sort().map((k, i) => {
 							return renderTree(k, node.dependencies[k], i);
@@ -44,20 +53,32 @@ class PackageDiff extends Component {
 		}
 
 		return (
-			<div>
-				<h2>{getDateMessage(this.props.ts)}</h2>
-				{getLink(this.props)}
-				<ul className="top hierarchy">
-					{Object.keys(this.props.dependencies || {}).sort().map((k, i) => {
-						return renderTree(k, this.props.dependencies[k], i);
-					})}
-				</ul>
+			<div className="diff">
+				<div className="lhs">
+					<h2>{getDateMessage(this.props.diff.lhs.ts)}</h2>
+					{getLink(this.props.diff.lhs)}
+					<ul className="top hierarchy">
+						{Object.keys(this.props.diff.lhs.dependencies || {}).sort().map((k, i) => {
+							return renderTree(k, this.props.diff.lhs.dependencies[k], i);
+						})}
+					</ul>
+				</div>
+				<div className="rhs">
+					<h2>{getDateMessage(this.props.diff.rhs.ts)}</h2>
+					{getLink(this.props.diff.rhs)}
+					<ul className="top hierarchy">
+						{Object.keys(this.props.diff.rhs.dependencies || {}).sort().map((k, i) => {
+							return renderTree(k, this.props.diff.rhs.dependencies[k], i);
+						})}
+					</ul>
+				</div>
 			</div>
 		);
 	}
 }
 
 function mapStateToProps({ packageReducer }, ownProps) {
+	//console.log( JSON.stringify(packageReducer.diff));
 	return { ...packageReducer, ...ownProps.params };
 }
 

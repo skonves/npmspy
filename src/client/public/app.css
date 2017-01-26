@@ -131,33 +131,25 @@ form.hero {
 }
 
 /**********************
-  CHANGE SETS
+  DIFF
 **********************/
 
-ul.changesets>li, .changeset {
-	padding-bottom: 1em;
+.diff {
+	display: flex;
 }
 
-ul.changesets>li *, .changeset * {
-	font-size: 14px;
-} 
-
-ul.changesets>li .lhs span, .changeset .lhs span {
-	background-color: #ffecec;
+.diff>.lhs, .diff>.rhs {
+	width: 50%;
 }
-ul.changesets>li .lhs span.changed, .changeset .lhs span.changed {
+
+.diff>.lhs .removed, .diff>.lhs span.changed {
 	background-color: #f8cbcb;
 }
-div.rhs span {
-	background-color: #dbffdb;
-}
-div.rhs span.changed {
+
+.diff>.rhs .added, .diff>.rhs span.changed {
 	background-color: #a6f3a6;
 }
-div.lhs>span, div.rhs>span {
-	display: inline-block;
-	padding: 2px .5em;
-}
+
 
 /**********************
   HIERARCHY

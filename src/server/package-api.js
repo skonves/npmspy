@@ -42,6 +42,21 @@ app.get('/:packageId/versions/:version', (req, res) => {
 		.catch(reason => res.status(500).send({ reason }));
 });
 
+app.get('/:packageId/versions/:version/diff', (req, res) => {
+	const values = {
+		packageId: req.params.packageId,
+		version: req.params.version,
+		ts: req.query.ts,
+		rhsversion: req.query.rhsversion,
+		rhsts: req.query.rhsts
+	};
+
+	getRepository()
+		.packages(operations.packages.GET_DIFF, values)
+		.then(value => res.send(value))
+		.catch(reason => res.status(500).send({ reason }));
+});
+
 app.get('/:packageId/versions/:version/history', (req, res) => {
 	const values = {
 		packageId: req.params.packageId,

@@ -54,6 +54,26 @@ function getDependencies(values) {
 	});
 }
 
+function getDiff(values) {
+	const packageId = (values || {}).packageId;
+	const version = (values || {}).version;
+	const ts = (values || {}).ts;
+	const rhsversion = (values || {}).rhsversion;
+	const rhsts = (values || {}).rhsts;
+
+	let uri = `${endpoint}/packages/${packageId}/versions/${version}/diff`;
+
+	return new Promise((resolve, reject) => {
+		request.get(uri).query({ ts, rhsversion, rhsts }).end((err, res) => {
+			if (err) {
+				reject(err);
+			} else {
+				resolve(res.body);
+			}
+		});
+	});
+}
+
 function getHistory(values) {
 	const packageId = (values || {}).packageId;
 	const version = (values || {}).version;
@@ -85,6 +105,8 @@ export default function (name, values) {
 			return getVersions(values);
 		case operations.packages.GET_DEPENDENCIES:
 			return getDependencies(values);
+		case operations.packages.GET_DIFF:
+			return getDiff(values);
 		case operations.packages.GET_HISTORY:
 			return getHistory(values);
 	}
