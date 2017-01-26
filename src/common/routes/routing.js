@@ -22,7 +22,7 @@ export default (dispatch, getState) => {
 			<Route path="packages" components={{ pageHeader: PackageHeader, page: Package }} onEnter={initPackage} >
 				<Route path=":versionId" component={PackageDetails} onEnter={initDetails} />
 				<Route path=":versionId/dependencies" component={PackageDependencies} onEnter={initDependencies} />
-				<Route path=":versionId/history" component={PackageHistory} onEnter={initHistory} />
+				<Route path=":versionId/history" component={PackageHistory} />
 			</Route>
 		</Route>
 	);

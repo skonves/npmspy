@@ -2,7 +2,7 @@ import request from 'superagent';
 
 import operations from '../../common/constants/operations';
 
-const endpoint = 'http://localhost:3000/api';
+const endpoint = '/api';
 
 function search(values) {
 	const query = (values || {}).query;

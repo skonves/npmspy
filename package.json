@@ -11,7 +11,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "webpack": "webpack --optimize-dedupe",
     "webpack-min": "webpack --optimize-dedupe --optimize-minimize",
-    "copystyles": "copyfiles -f src/client/public/*.css .compiled/dist/styles"
+    "copystyles": "copyfiles -f src/client/public/*.css .compiled/dist/styles",
+    "docker": "docker build -t npmspy/website ."
   },
   "author": "Steve Konves",
   "license": "MIT",
