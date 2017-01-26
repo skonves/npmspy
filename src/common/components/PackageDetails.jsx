@@ -6,23 +6,10 @@ import { setActiveView } from '../actions/package-actions';
 import RaisedButton from 'material-ui/RaisedButton';
 
 class PackageDetails extends Component {
-	// constructor(props) {
-	// 	super(props);
-
-	// 	if (this.props.setActiveView !== 'details') {
-	// 		this.props.setActiveView('details');
-	// 	}
-	// }
 
 	static contextTypes = {
 		store: React.PropTypes.object.isRequired,
 	};
-
-	// componentWillMount() {
-	// 	if (this.props.activeView !== 'details') {
-	// 		this.props.setActiveView('details');
-	// 	}
-	// }
 
 	render() {
 		return (
@@ -34,13 +21,5 @@ class PackageDetails extends Component {
 function mapStateToProps({ packageReducer }, ownProps) {
 	return { ...packageReducer, ...ownProps.params };
 }
-
-// function mapDispatchToProps(dispatch, ownProps) {
-// 	return {
-// 		setActiveView: viewName => {
-// 			dispatch(setActiveView(viewName));
-// 		}
-// 	};
-// }
 
 export default connect(mapStateToProps)(PackageDetails);
