@@ -53,24 +53,27 @@ class PackageDiff extends Component {
 		}
 
 		return (
-			<div className="diff">
-				<div className="lhs">
-					<h2>{getDateMessage(this.props.diff.lhs.ts)}</h2>
-					{getLink(this.props.diff.lhs)}
-					<ul className="top hierarchy">
-						{Object.keys(this.props.diff.lhs.dependencies || {}).sort().map((k, i) => {
-							return renderTree(k, this.props.diff.lhs.dependencies[k], i);
-						})}
-					</ul>
-				</div>
-				<div className="rhs">
-					<h2>{getDateMessage(this.props.diff.rhs.ts)}</h2>
-					{getLink(this.props.diff.rhs)}
-					<ul className="top hierarchy">
-						{Object.keys(this.props.diff.rhs.dependencies || {}).sort().map((k, i) => {
-							return renderTree(k, this.props.diff.rhs.dependencies[k], i);
-						})}
-					</ul>
+			<div>
+				{this.props.diff.lhs.$diff && this.props.diff.lhs.$diff.uri ? (<a target="_blank" rel="noopener noreferrer" href={this.props.diff.lhs.$diff.uri}>diff</a>) : ''}
+				<div className="diff">
+					<div className="lhs">
+						<h2>{getDateMessage(this.props.diff.lhs.ts)}</h2>
+						{getLink(this.props.diff.lhs)}
+						<ul className="top hierarchy">
+							{Object.keys(this.props.diff.lhs.dependencies || {}).sort().map((k, i) => {
+								return renderTree(k, this.props.diff.lhs.dependencies[k], i);
+							})}
+						</ul>
+					</div>
+					<div className="rhs">
+						<h2>{getDateMessage(this.props.diff.rhs.ts)}</h2>
+						{getLink(this.props.diff.rhs)}
+						<ul className="top hierarchy">
+							{Object.keys(this.props.diff.rhs.dependencies || {}).sort().map((k, i) => {
+								return renderTree(k, this.props.diff.rhs.dependencies[k], i);
+							})}
+						</ul>
+					</div>
 				</div>
 			</div>
 		);
