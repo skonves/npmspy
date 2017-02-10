@@ -4,14 +4,14 @@
   "description": "Reference projects for ES7/8+ code",
   "main": "index.js",
   "scripts": {
-    "build": "babel src --out-dir .compiled & npm run webpack & npm run copystyles",
+    "compile": "babel src --out-dir .compiled/src && babel tests --out-dir .compiled/tests && npm run webpack && npm run copystyles",
     "clean": "rm -rf .compiled && mkdir .compiled",
-    "rebuild": "npm run clean && npm run build",
     "start": "NODE_ENV=development node ./.compiled/server/server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
+    "recompile": "npm run clean && npm run compile",
     "webpack": "webpack --optimize-dedupe",
     "webpack-min": "webpack --optimize-dedupe --optimize-minimize",
-    "copystyles": "copyfiles -f src/client/public/*.css .compiled/dist/styles",
+    "copystyles": "copyfiles -f src/client/public/*.css .compiled/src/dist/styles",
     "docker": "docker build -t npmspy/website ."
   },
   "author": "Steve Konves",

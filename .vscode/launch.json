@@ -8,7 +8,7 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
-            "program": "${workspaceRoot}/.compiled/server/server.js",
+            "program": "${workspaceRoot}/.compiled/src/server/server.js",
             "stopOnEntry": false,
             "args": [],
             "cwd": "${workspaceRoot}",
@@ -21,7 +21,7 @@
             },
             "console": "internalConsole",
             "sourceMaps": true,
-            "outDir": "${workspaceRoot}/.compiled"
+            "outDir": "${workspaceRoot}/.compiled/src"
         },
         {
             "type": "node",

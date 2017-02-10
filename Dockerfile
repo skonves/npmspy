@@ -8,7 +8,7 @@ WORKDIR /usr/src/app
 COPY package.json /usr/src/app/
 RUN npm install --production
 
-ADD ./.compiled /usr/src/app/
+ADD ./.compiled/src /usr/src/app/
 
 EXPOSE 3000
 CMD ["node", "./server/server"]
