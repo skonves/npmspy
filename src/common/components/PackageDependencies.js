@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react';
-import moment from 'moment';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { fetchDependencies } from '../actions/package-actions';
@@ -24,9 +23,7 @@ class PackageDependencies extends Component {
 		}
 
 		function getDateMessage(ts) {
-
-			const str = ts ? moment(ts).calendar() : 'right now';
-			return `As of ${str}`;
+			return `As of ${ts}`;
 		}
 
 		function getLink(props) {

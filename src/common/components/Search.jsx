@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react';
-import moment from 'moment';
 import { connect } from 'react-redux';
 import { Link, browserHistory } from 'react-router';
 import { fetchSearchResults } from '../actions/search-actions';

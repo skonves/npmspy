@@ -68,58 +68,64 @@ export function setDependencies(dependencies) {
 	};
 }
 
+export function fetchDetails(packageId, version, ts, rhsversion, rhsts) {
+	return (dispatch, getState) => {
+		dispatch(setPackage(packageId, version, ts, rhsversion, rhsts));
+		return new Promise(r => r());
+	};
+}
+
 export function fetchDiff(packageId, version, ts, rhsversion, rhsts) {
-	return dispatch => {
+	return (dispatch, getState) => {
+		dispatch(setPackage(packageId, version, ts, rhsversion, rhsts));
+		dispatch(setDiffIsLoading(true));
 		return getRepository()
 			.packages(operations.packages.GET_DIFF, { packageId, version, ts, rhsversion, rhsts })
 			.then(value => {
-				dispatch(setDependencies(value.dependencies));
-				dispatch(setDependenciesAreLoading(false));
-				dispatch(setDiffRhs(rhsversion, rhsts));
+				dispatch(setDiff(value));
+				dispatch(setDiffIsLoading(false));
 			})
 			.catch(reason => {
-				dispatch(setDependenciesAreLoading(false));
+				dispatch(setDiffIsLoading(false));
 			});
 	};
 }
 
-export function fetchVersion(packageId, version, ts, rhsversion, rhsts) {
-	return dispatch => {
-		dispatch(setPackage(packageId, version, ts, rhsversion, rhsts));
-		// TODO: load package details
-		dispatch(setDetails({ message: 'TODO' }));
-		dispatch(setDependenciesAreLoading(true));
-		dispatch(setDiffIsLoading(true));
+// export function fetchVersion(packageId, version, ts, rhsversion, rhsts) {
+// 	return dispatch => {
+// 		dispatch(setPackage(packageId, version, ts, rhsversion, rhsts));
+// 		// TODO: load package details
+// 		dispatch(setDetails({ message: 'TODO' }));
+// 		dispatch(setDependenciesAreLoading(true));
+// 		dispatch(setDiffIsLoading(true));
 
-		return Promise.all([
-			// TODO: load package details
-			getRepository()
-				.packages(operations.packages.GET_DEPENDENCIES, { packageId, version, ts })
-				.then(value => {
-					dispatch(setDependencies(value.dependencies));
-					dispatch(setDependenciesAreLoading(false));
-				})
-				.catch(reason => {
-					dispatch(setDependenciesAreLoading(false));
-				}),
-			getRepository()
-				.packages(operations.packages.GET_DIFF, { packageId, version, ts, rhsversion, rhsts })
-				.then(value => {
-					dispatch(setDiff(value));
-					dispatch(setDiffIsLoading(false));
-				})
-				.catch(reason => {
-					dispatch(setDiffIsLoading(false));
-				})
-		]);
-	};
-}
+// 		return Promise.all([
+// 			// TODO: load package details
+// 			getRepository()
+// 				.packages(operations.packages.GET_DEPENDENCIES, { packageId, version, ts })
+// 				.then(value => {
+// 					dispatch(setDependencies(value.dependencies));
+// 					dispatch(setDependenciesAreLoading(false));
+// 				})
+// 				.catch(reason => {
+// 					dispatch(setDependenciesAreLoading(false));
+// 				}),
+// 			getRepository()
+// 				.packages(operations.packages.GET_DIFF, { packageId, version, ts, rhsversion, rhsts })
+// 				.then(value => {
+// 					dispatch(setDiff(value));
+// 					dispatch(setDiffIsLoading(false));
+// 				})
+// 				.catch(reason => {
+// 					dispatch(setDiffIsLoading(false));
+// 				})
+// 		]);
+// 	};
+// }
 
 export function fetchDependencies(packageId, version, ts) {
-	return dispatch => {
-		setPackage(packageId, version, ts);
+	return (dispatch, getState) => {
 		dispatch(setPackage(packageId, version, ts));
-		// TODO: load package details
 		dispatch(setDependenciesAreLoading(true));
 
 		return getRepository()

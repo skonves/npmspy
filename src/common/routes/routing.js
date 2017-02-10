@@ -11,7 +11,7 @@ import PackageDependencies from '../components/PackageDependencies';
 import PackageDiff from '../components/PackageDiff';
 import Search from '../components/Search';
 
-import { fetchVersion, setActiveView, fetchDependencies } from '../actions/package-actions';
+import { fetchVersion, setActiveView, fetchDetails, fetchDependencies, fetchDiff } from '../actions/package-actions';
 import { fetchSearchResults } from '../actions/search-actions';
 
 export default (dispatch, getState) => {
@@ -19,7 +19,7 @@ export default (dispatch, getState) => {
 		<Route path="/" component={App}>
 			<IndexRoute component={Home} />
 			<Route path="search" components={{ page: Search }} onEnter={initSearch} />
-			<Route path="packages" components={{ pageHeader: PackageHeader, page: Package }} onEnter={initPackage} >
+			<Route path="packages" components={{ pageHeader: PackageHeader, page: Package }} >
 				<Route path=":versionId" component={PackageDetails} onEnter={initDetails} />
 				<Route path=":versionId/dependencies" component={PackageDependencies} onEnter={initDependencies} />
 				<Route path=":versionId/diff/:rhsversion" component={PackageDiff} onEnter={initDiff} />
@@ -27,27 +27,38 @@ export default (dispatch, getState) => {
 		</Route>
 	);
 
-	function initPackage(nextState, replace, callback) {
-		const state = getState().packageReducer;
-		console.log('initializing package');
-		if (!state.packageId ||
-			!state.version ||
-			`${state.packageId}@${state.version}` !== nextState.params.versionId
-		) {
-			const parts = nextState.params.versionId.split('@');
-			fetchVersion(parts[0], parts[1], nextState.location.query.ts, nextState.params.rhsversion, nextState.location.query.rhsts)(dispatch)
-				.then(() => {
-					callback();
-				})
-				.catch(reason => callback(reason));
-		} else {
-			callback();
-		}
-	}
+	// function initPackage(nextState, replace, callback) {
+	// 	const state = getState().packageReducer;
+	// 	console.log('initializing package');
+	// 	if (!state.packageId ||
+	// 		!state.version ||
+	// 		`${state.packageId}@${state.version}` !== nextState.params.versionId
+	// 	) {
+	// 		const parts = nextState.params.versionId.split('@');
+	// 		fetchVersion(parts[0], parts[1], nextState.location.query.ts, nextState.params.rhsversion, nextState.location.query.rhsts)(dispatch)
+	// 			.then(() => {
+	// 				callback();
+	// 			})
+	// 			.catch(reason => callback(reason));
+	// 	} else {
+	// 		callback();
+	// 	}
+	// }
 
-	function initDetails(nextState, replace) {
+	function initDetails(nextState, replace, callback) {
+		const state = getState().packageReducer;
 		console.log('initializing details');
 		dispatch(setActiveView('details'));
+
+		const stateTs = Number(state.ts) || undefined;
+		const routeTs = Number(nextState.location.query.ts) || undefined;
+
+		const parts = nextState.params.versionId.split('@');
+		fetchDetails(parts[0], parts[1], nextState.location.query.ts)(dispatch)
+			.then(() =>
+				callback()
+			)
+			.catch(reason => callback(reason));
 	}
 
 	function initDependencies(nextState, replace, callback) {
@@ -75,9 +86,49 @@ export default (dispatch, getState) => {
 
 	}
 
-	function initDiff(nextState, replace) {
+	function initDiff(nextState, replace, callback) {
+		const state = getState().packageReducer;
 		console.log('initializing diff');
 		dispatch(setActiveView('diff'));
+
+		const stateTs = Number(state.ts) || undefined;
+		const routeTs = Number(nextState.location.query.ts) || undefined;
+
+		const parts = nextState.params.versionId.split('@');
+
+		const oldState = {
+			packageId: state.packageId,
+			version: state.version,
+			ts: state.ts,
+			rhsversion: state.rhsversion,
+			rhsts: state.rhsts
+		};
+
+		const newState = {
+			packageId: parts[0],
+			version: parts[1],
+			ts: nextState.location.query.ts,
+			rhsversion: nextState.params.rhsversion,
+			rhsts: nextState.location.query.rhsts
+		};
+
+		console.log(oldState);
+		console.log(newState);
+
+		if (parts[0] !== state.packageId ||
+			parts[1] !== state.version ||
+			nextState.location.query.ts != state.ts ||
+			nextState.params.rhsversion !== state.rhsversion //||
+			//nextState.location.query.rhsts != state.rhsts
+		) {
+			fetchDiff(parts[0], parts[1], nextState.location.query.ts, nextState.params.rhsversion, nextState.location.query.rhsts)(dispatch)
+				.then(() =>
+					callback()
+				)
+				.catch(reason => callback(reason));
+		} else {
+			callback();
+		}
 	}
 
 	function initSearch(nextState, replace, callback) {

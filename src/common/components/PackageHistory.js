@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+/*import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
@@ -10,7 +10,7 @@ class PackageHistory extends Component {
 
 	render() {
 		function prettyDate(ts) {
-			const diff = new Date().getTime() - ts;
+			const diff = Date.UTC().getTime() - ts;
 			if (diff < 7 * 86400000) {
 				return (<span title={moment(ts, 'x').format()}>{moment(ts, 'x').calendar()}</span>);
 			} else {
@@ -92,4 +92,4 @@ function mapStateToProps({ packageReducer }, ownProps) {
 	return { ...packageReducer, ...ownProps.params };
 }
 
-export default connect(mapStateToProps)(PackageHistory);
+export default connect(mapStateToProps)(PackageHistory);*/
